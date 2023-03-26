@@ -37,9 +37,9 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
 
   enum bottleStatus {minted, askedForShipping, shipped, received, contested, lost } //rajouter lost et gérer la partie contested ? 
 
-
     WineBottle[] idToWineBottle;
     SaleInfo[] idToSaleInfo;
+
     mapping(address => bool) private producerWhitelist;
     mapping(uint256 => Sale[]) private idToSales;
     mapping(uint256 => uint256) private idToCollateral;
@@ -62,6 +62,11 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
 
 // ::::::::::::: GETTERS ::::::::::::: //
  
+    /// Return true if the Owner called the function
+    /// @dev return a boolean to say if this is the Owner that called the function
+  function isCallerOwner() public view returns (bool) {
+    return (msg.sender == owner());
+  }
 
     /// Return the number of NFT created
     /// @dev return the current value of the tokenId
