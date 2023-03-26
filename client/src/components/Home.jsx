@@ -4,7 +4,7 @@ import useEth from "../contexts/EthContext/useEth";
 import AdminComponent from './AdminComponent';
 import ProducerComponent from './ProducerComponent';
 import ViewerComponent from './ViewerComponent';
-import { Flex } from '@chakra-ui/react';
+import { Flex, Scrollbar } from '@chakra-ui/react';
 
 
 
