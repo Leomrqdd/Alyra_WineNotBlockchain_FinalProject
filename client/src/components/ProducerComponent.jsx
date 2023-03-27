@@ -261,7 +261,7 @@ function ProducerComponent() {
         {bottleInfoSale.price && (
           <div>
             <p>Bottle Sale : {(bottleInfoSale.onSale).toString()}</p>
-            <p>Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether</p>
+            <p>Bottle PriceV2 : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether</p>
           </div>
         )}
           
