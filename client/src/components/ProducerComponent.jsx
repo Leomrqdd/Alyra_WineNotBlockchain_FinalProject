@@ -14,12 +14,22 @@ function ProducerComponent() {
     const [serialNumber, setSerialNumber] = useState("");
     const [tokenURI, setTokenURI] = useState("");
     const [mintEvent, setMintEvent] = useState([]);
-    const [id, setId] = useState('');
     const [price, setPrice] = useState('');
     const [saleEvent, setSaleEvent] = useState([]);
     const [Collateral, setCollateral] = useState('');
     const [bottleInfo, setBottleInfo] = useState({});
     const [bottleInfoSale, setBottleInfoSale] = useState({});
+    const [bottleSales, setBottleSales] = useState({});
+    const [bottleStatus, setBottleStatus] = useState(null);
+
+
+    const [id, setId] = useState('');
+    const [id2, setId2] = useState('');
+    const [id3, setId3] = useState('');
+    const [id4, setId4] = useState('');
+    const [id5, setId5] = useState('');
+    const [id6, setId6] = useState('');
+
 
 
 
@@ -55,7 +65,7 @@ function ProducerComponent() {
 
     const handleCollateral = async () => {
       const result = await contract.methods
-        .addCollateral(id)
+        .addCollateral(id2)
         .send({ from: accounts[0] }); 
   
       console.log(result);
@@ -63,7 +73,7 @@ function ProducerComponent() {
 
     const handleGetBottleInfo = async () => {
       const info = await contract.methods
-      .getBottleInfo(id)
+      .getBottleInfo(id3)
       .call({ from: accounts[0] }); 
 
       setBottleInfo(info);
@@ -71,13 +81,35 @@ function ProducerComponent() {
     
     const handleGetBottleInfoSale = async () => {
       const info = await contract.methods
-      .getBottleSaleInfo(id)
+      .getBottleSaleInfo(id4)
       .call({ from: accounts[0] }); 
 
       setBottleInfoSale(info);
 
 
     };
+
+    const handleGetBottleStatus = async () => {
+      const info = await contract.methods
+      .getBottleStatus(id6)
+      .call({ from: accounts[0] }); 
+
+      setBottleStatus(info);
+
+
+    };
+    
+
+    const handleGetBottleSales = async () => {
+      const info = await contract.methods
+      .getSalesHistory(id5)
+      .call({ from: accounts[0] }); 
+
+      setBottleSales(info);
+
+
+    };
+    
     
 
 
@@ -119,50 +151,55 @@ function ProducerComponent() {
       <Flex
         w="50%"
         h="100%"
-        bg="gray.100"
+        bg="#f2f2f2"
         direction="column"
         align="center"
         justify="center"
         overflowY="auto"
       >
           <FormControl>
-            <FormLabel>Producer Name</FormLabel>
             <Input
               type="text"
               value={producerName}
               onChange={(e) => setProducerName(e.target.value)}
+              placeholder="Enter producer Name"
+
             />
           </FormControl>
           <FormControl>
-            <FormLabel>Designation of Origin</FormLabel>
             <Input
               type="text"
               value={designationOfOrigin}
               onChange={(e) => setDesignationOfOrigin(e.target.value)}
+              placeholder="Enter wine origin"
+
             />
           </FormControl>
           <FormControl>
-            <FormLabel>Vintage</FormLabel>
             <Input
               type="number"
               value={vintage}
               onChange={(e) => setVintage(e.target.value)}
+              placeholder="Enter vintage"
+
             />
           </FormControl>
           <FormControl>
-            <FormLabel>Serial Number</FormLabel>
             <Input
               type="number"
               value={serialNumber}
               onChange={(e) => setSerialNumber(e.target.value)}
+              placeholder="Enter serial number of the bottle"
+
             />
           </FormControl>
           <FormControl>
-            <FormLabel>Token URI</FormLabel>
             <Input
               type="text"
               value={tokenURI}
               onChange={(e) => setTokenURI(e.target.value)}
+              placeholder="Enter link to the NFT image"
+
             />
           </FormControl>
           <Button mt="4" onClick={handleMint}>
@@ -176,19 +213,21 @@ function ProducerComponent() {
           </Text>
 
           <FormControl>
-            <FormLabel>WineBottle ID</FormLabel>
             <Input
               type="number"
               value={id}
               onChange={(e) => setId(e.target.value)}
+              placeholder="Enter bottle ID"
+
             />
           </FormControl>
           <FormControl>
-            <FormLabel>Price in Ether</FormLabel>
             <Input
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
+              placeholder="Enter price in ether"
+
             />
           </FormControl>
           <Button mt="4" onClick={handleSell}>
@@ -203,11 +242,12 @@ function ProducerComponent() {
 
 
           <FormControl>
-            <FormLabel>WineBottle ID</FormLabel>
             <Input
               type="number"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              value={id2}
+              onChange={(e) => setId2(e.target.value)}
+              placeholder="Enter bottle ID"
+
             />
           </FormControl>
           <Button mt="4" onClick={handleCollateral}>
@@ -227,11 +267,10 @@ function ProducerComponent() {
         >
 
         <FormControl>
-          <FormLabel>WineBottle ID</FormLabel>
             <Input
             type="number"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
+            value={id3}
+            onChange={(e) => setId3(e.target.value)}
             placeholder="Enter bottle ID"
           />
         </FormControl>
@@ -248,11 +287,10 @@ function ProducerComponent() {
         )}
 
         <FormControl>
-          <FormLabel>WineBottle ID</FormLabel>
             <Input
             type="number"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
+            value={id4}
+            onChange={(e) => setId4(e.target.value)}
             placeholder="Enter bottle ID"
           />
         </FormControl>
@@ -261,10 +299,55 @@ function ProducerComponent() {
         {bottleInfoSale.price && (
           <div>
             <p>Bottle Sale : {(bottleInfoSale.onSale).toString()}</p>
-            <p>Bottle PriceV2 : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether</p>
+            <p>Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether</p>
           </div>
         )}
-          
+
+        <FormControl>
+            <Input
+            type="number"
+            value={id5}
+            onChange={(e) => setId5(e.target.value)}
+            placeholder="Enter bottle ID"
+          />
+        </FormControl>
+
+        <Button mt="4" onClick={handleGetBottleSales}>Get Bottle Sales History </Button>
+        {bottleSales.length > 0 && (
+        <div>
+          {bottleSales.map((Sale, index) => (
+            <div key={index}>
+              <p>Seller: {Sale.seller}</p>
+              <p>Buyer: {Sale.buyer}</p>
+              <p>Price: {Sale.price}</p>
+              <p>Timestamp: {Sale.timestamp}</p>
+           </div>
+          ))}
+        </div>
+        )}
+
+        <FormControl>
+            <Input
+            type="number"
+            value={id6}
+            onChange={(e) => setId6(e.target.value)}
+            placeholder="Enter bottle ID"
+          />
+        </FormControl>
+
+          <Button mt="4" onClick={handleGetBottleStatus}>Get Bottle Status</Button>
+          {bottleStatus != undefined && (
+          <>
+            {bottleStatus == 0 && <p>Bottle Status : Mint</p>}
+            {bottleStatus == 1 && <p>Bottle Status : Asked for Shipping</p>}
+            {bottleStatus == 2 && <p>Bottle Status : Shipped</p>}
+            {bottleStatus == 3 && <p>Bottle Status : Received</p>}
+            {bottleStatus == 4 && <p>Bottle Status : Contested</p>}
+            {bottleStatus == 5 && <p>Bottle Status : lost</p>}
+            {bottleStatus > 5 && <p>Bottle Status : Unknown</p>}
+          </>
+          )}
+            
           
         </Flex>
 
