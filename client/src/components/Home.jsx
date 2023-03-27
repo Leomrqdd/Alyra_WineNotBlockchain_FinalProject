@@ -4,7 +4,7 @@ import useEth from "../contexts/EthContext/useEth";
 import AdminComponent from './AdminComponent';
 import ProducerComponent from './ProducerComponent';
 import ViewerComponent from './ViewerComponent';
-import { Flex, Scrollbar } from '@chakra-ui/react';
+import { Flex,Box } from '@chakra-ui/react';
 
 
 
@@ -62,20 +62,22 @@ function Home() {
 
     return (
       <>
-        <Navbar userType={userType} web3Enabled={web3Enabled} />
+        <Box className="navbar" h="64px">
+          <Navbar userType={userType} web3Enabled={web3Enabled} />
+        </Box>
         <Flex
           w="100%"
           h="calc(100vh - 64px)"
           alignItems="center"
           justifyContent="center"
         >
-          {userType === "owner" ? (
-            <AdminComponent />
-          ) : userType === "producer" ? (
-            <ProducerComponent />
-          ) : (
-            <ViewerComponent />
-          )}
+            {userType === "owner" ? (
+              <AdminComponent />
+            ) : userType === "producer" ? (
+              <ProducerComponent />
+            ) : (
+              <ViewerComponent />
+            )}
         </Flex>
       </>
     );

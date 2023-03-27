@@ -13,7 +13,7 @@ function Navbar(userType, web3Enabled, userAddress) {
   }, [accounts]);
 
   return (
-    <Box bg="gray.50" p="4" w="100%" position="fixed" zIndex="999">
+    <Box bg="gray.50" p="4" w="100%" position="relative" zIndex="999" height="64px" >
       <Flex alignItems="center">
         <Text fontSize="2xl" fontWeight="bold">
         {userType.userType === "owner" && web3Enabled ? "Admin" : userType.userType === "producer" ? "Producteur" : "Spectateur"}
