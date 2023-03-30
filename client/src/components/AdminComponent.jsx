@@ -110,36 +110,33 @@ function AdminComponent() {
         <Box p="4">
           <Flex direction="column" alignItems="center">
             <FormControl id="producerAddress">
-              <FormLabel>Adresse du producteur</FormLabel>
               <Input
                 type="text"
                 value={producerAddress}
                 onChange={handleAddressChange}
-                placeholder="0x..."
+                placeholder="Producer wallet address "
               />
             </FormControl>
             <Button mt="4" onClick={addProducer}>
               Ajouter le producteur à la liste blanche
             </Button>
             <FormControl id="producerAddress">
-              <FormLabel>Adresse du producteur</FormLabel>
               <Input
                 type="text"
                 value={producerAddress2}
                 onChange={handleAddressChange2}
-                placeholder="0x..."
+                placeholder="Producer wallet address"
               />
             </FormControl>
             <Button mt="4" onClick={deleteProducer}>
               Supprimer le producteur de la liste blanche
             </Button>
             <FormControl id="producerAddress">
-              <FormLabel>Adresse du producteur</FormLabel>
               <Input
                 type="text"
                 value={producerAddress3}
                 onChange={handleAddressChange3}
-                placeholder="0x..."
+                placeholder="Producer wallet address"
               />
             </FormControl>
             <Button mt="4" onClick={checkProducer}>

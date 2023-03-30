@@ -51,6 +51,13 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     event BottleCreation(address _owner, uint id);
     event BottleForSale(uint id, uint price);
     event BottleTransfer(address from, address to, uint id, uint price);
+    event BottleAskedForShipping(uint id, address from);
+    event CollateralAdded(uint id, address from, uint value);
+    event ConfirmedDelivery(uint id, address from, uint value);
+    event ContestedDelivery(uint id, address from);
+
+
+
     
     
     
@@ -262,6 +269,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     
       idToBottleStatus[_id] = bottleStatus.askedForShipping;
       shipmentConfirmedTimestamps[_id] = block.timestamp;
+      emit BottleAskedForShipping(_id,msg.sender);
 
   }
 
@@ -283,6 +291,8 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     idToCollateral[_id] = msg.value;
     idToBottleStatus[_id] = bottleStatus.shipped;
 
+    emit CollateralAdded(_id, msg.sender, msg.value);
+
 }
 
 
@@ -301,6 +311,8 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     require(success, "Failed to send back the collateral to producer");
 
     idToBottleStatus[_id] = bottleStatus.received;
+    
+    emit ConfirmedDelivery(_id,msg.sender,collateral);
 
 
 }
@@ -316,6 +328,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     require(idToBottleStatus[_id] != bottleStatus.received, "This bottle has already been received");
 
     idToBottleStatus[_id] = bottleStatus.contested;
+    emit ContestedDelivery(_id,msg.sender);
 
 }
 

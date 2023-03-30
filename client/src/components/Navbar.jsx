@@ -16,7 +16,7 @@ function Navbar(userType, web3Enabled, userAddress) {
     <Box bg="gray.50" p="4" w="100%" position="relative" zIndex="999" height="64px" >
       <Flex alignItems="center">
         <Text fontSize="2xl" fontWeight="bold">
-        {userType.userType === "owner" && web3Enabled ? "Admin" : userType.userType === "producer" ? "Producteur" : "Spectateur"}
+        {userType.userType === "owner" && web3Enabled ? "Admin" : userType.userType === "producer" ? "Producer" : "Buyer/Seller"}
         </Text>
         <Spacer />
         <Text fontSize="2xl" fontWeight="bold">
