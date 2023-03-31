@@ -121,17 +121,8 @@ function ProducerComponent() {
 
     };
 
-  const handleSentBottle = (id) => {
-    setSentBottles([...sentBottles, id]);
-  };
 
-  const isSent = (id) => {
-    return sentBottles.includes(id);
-  };
-  
     
-    
-
 
     
     useEffect(() => {
@@ -356,13 +347,14 @@ function ProducerComponent() {
             </div>     
           </Text>
 
+
           <Text>
           <div>
               <ul>
-                {confirmedDeliveryOldEvent.map((event) => (
+                {contestedDeliveryOldEvent.map((event) => (
                   <li key={event.id}>
-                    The delivery of the Bottle with the id {event.returnValues.id} was confirmed by the owner with the address {event.returnValues.from}. 
-                    Please check if you got back your collateral amount of {web3.utils.fromWei(event.returnValues.value.toString(),"ether")} Ether.
+                    The delivery of the Bottle with the id {event.returnValues.id} was contested by the owner with the address {event.returnValues.from}. 
+                    WineNotBlockchain or a arbitrator will soon contact you to solve the issue ASAP.
                   </li>
                 ))}
               </ul>
@@ -372,10 +364,10 @@ function ProducerComponent() {
           <Text>
           <div>
               <ul>
-                {contestedDeliveryOldEvent.map((event) => (
+                {confirmedDeliveryOldEvent.map((event) => (
                   <li key={event.id}>
-                    The delivery of the Bottle with the id {event.returnValues.id} was contested by the owner with the address {event.returnValues.from}. 
-                    WineNotBlockchain or a arbitrator will soon contact you to solve the issue ASAP.
+                    The delivery of the Bottle with the id {event.returnValues.id} was confirmed by the owner with the address {event.returnValues.from}. 
+                    Please check if you got back your collateral amount of {web3.utils.fromWei(event.returnValues.value.toString(),"ether")} Ether.
                   </li>
                 ))}
               </ul>

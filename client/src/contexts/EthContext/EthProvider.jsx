@@ -27,18 +27,17 @@ function EthProvider({ children }) {
       }
     }, []);
 
-  useEffect(() => {
+
     const tryInit = async () => {
       try {
         const artifact = require("../../contracts/WineNotBlockchain.json");
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
         init(artifact);
       } catch (err) {
         console.error(err);
       }
     };
 
-    tryInit();
-  }, [init]);
 
   useEffect(() => {
     const events = ["chainChanged", "accountsChanged"];
@@ -46,15 +45,18 @@ function EthProvider({ children }) {
       init(state.artifact);
     };
 
+    if (window.ethereum) {
     events.forEach(e => window.ethereum.on(e, handleChange));
     return () => {
       events.forEach(e => window.ethereum.removeListener(e, handleChange));
     };
+  }
   }, [init, state.artifact]);
 
   return (
     <EthContext.Provider value={{
       state,
+      tryInit,
       dispatch
     }}>
       {children}

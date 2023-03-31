@@ -4,17 +4,25 @@ import useEth from "../contexts/EthContext/useEth";
 import AdminComponent from './AdminComponent';
 import ProducerComponent from './ProducerComponent';
 import ViewerComponent from './ViewerComponent';
-import { Flex,Box } from '@chakra-ui/react';
+import {Box, Flex, Text } from "@chakra-ui/react";
 
 
 
 
 function Home() {
 
-    const { state: { contract, accounts } } = useEth();
+    const { state: { contract, accounts, web3 } } = useEth();
     const [userType, setUserType] = useState("viewer");
-    const [web3Enabled, setWeb3Enabled] = useState(false);
     const [input, setInput] = useState(0);
+    const [metamask, setMetamask] = useState(false);
+
+
+
+    useEffect(() => {
+      if (window.ethereum) {
+        setMetamask(true);
+      }
+    }, []);
 
 
   
@@ -45,41 +53,70 @@ function Home() {
     }, [contract, accounts, userType]);
 
 
-  
-    useEffect(() => {
-      const checkWeb3 = async () => {
-        if (window.ethereum) {
-          try {
-            await window.ethereum.request({ method: "eth_requestAccounts" });
-            setWeb3Enabled(true);
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      };
-      checkWeb3();
-    }, [contract,accounts,web3Enabled]);
+
+
+
+
 
     return (
       <>
-        <Box className="navbar" h="64px">
-          <Navbar userType={userType} web3Enabled={web3Enabled} />
-        </Box>
+
+          <Box className="navbar" h="64px">
+            <Navbar userType={userType} />
+          </Box>
+
+          {metamask ? (
+          <>
+            
+            {accounts ? (
+          <>
+          
+          <Flex
+            w="100%"
+            h="calc(100vh - 64px)"
+            alignItems="center"
+            justifyContent="center"
+          >
+              {userType === "owner" ? (
+                <AdminComponent />
+              ) : userType === "producer" ? (
+                <ProducerComponent />
+              ) : (
+                <ViewerComponent />
+              )}
+          </Flex>
+          </>
+        ) : (
+
+          <Flex
+          w="100%"
+          h="calc(100vh - 64px)"
+          alignItems="center"
+          justifyContent="center"
+          >
+            <Text fontWeight="bold" textAlign="center" fontSize="2xl" color="#211b59" >
+            Please connect your wallet to use WineNotBlockchain
+            </Text>
+
+          </Flex>
+          )}
+        </>
+      ) : (
+
         <Flex
           w="100%"
           h="calc(100vh - 64px)"
           alignItems="center"
           justifyContent="center"
         >
-            {userType === "owner" ? (
-              <AdminComponent />
-            ) : userType === "producer" ? (
-              <ProducerComponent />
-            ) : (
-              <ViewerComponent />
-            )}
+
+          <Text fontWeight="bold" textAlign="center" fontSize="2xl" color="#211b59" >
+          Please install Metamask to use this application
+          </Text>
+
         </Flex>
-      </>
+      )}
+    </>
     );
   }
 
