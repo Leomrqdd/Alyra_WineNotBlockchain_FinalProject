@@ -27,7 +27,8 @@ function ViewerComponent() {
   const [confirmDeliverylOldEvent, setconfirmDeliveryOldEvent] = useState([]);
   const [totalSupply, setTotalSupply] = useState(null);
   const [ownedIds, setOwnedIds] = useState([]);
-  const [currentSellIds, setCurrentSellIds] = useState([]);
+  const [currentSells, setCurrentSells] = useState([]);
+
 
 
 
@@ -266,20 +267,27 @@ function ViewerComponent() {
     fetchData();
   }, [contract, accounts]);
 
+
   useEffect(() => {
     const fetchData = async () => {
-      setCurrentSellIds([]); // réinitialisation du tableau
+      const currentSells =[]; // réinitialisation du tableau
+
       const maxId = await contract.methods 
       .getTotalSupply()
       .call({ from: accounts[0] }); 
 
       for (let i = 1; i <= maxId; i++) {
-        const boolOnSale = await contract.methods.getBottleSaleInfo(i).call({ from: accounts[0]} )[1]; 
+        const structSale = await contract.methods.getBottleSaleInfo(i).call({ from: accounts[0]}) ; 
+        const boolOnSale = structSale.onSale
+        const price = structSale.price
   
         // Vérifie si la bouteille est en vente
-        if (boolOnSale == "true") {
+        if (boolOnSale == true) {
           // Ajoute l'élément à une liste pour l'affichage ultérieur
-          setCurrentSellIds(prevIds => [...prevIds, i]);
+          currentSells.push({id : i, price : price})
+
+          setCurrentSells(currentSells);
+        
         }
       }
     };
@@ -595,33 +603,35 @@ function ViewerComponent() {
               )}
             </Box>
 
-            <Box>
-            {currentSellIds.includes(1) || currentSellIds.includes(2) ? (
-                <Text fontSize="2xl" fontWeight="bold" mb={4}>
-                  Bottles for Sale
-                </Text>
-            ) : null }
-            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-                {currentSellIds.includes(1) && (
-                  <Box>
-                    <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/1.png" alt="My Image" w="100%" h="auto" />
-                    <Text textAlign="center">Bottle ID : 1 </Text>
 
-                  </Box>
-                )}
-                {currentSellIds.includes(2) && (
-                  <Box >
-                    <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/2.png" alt="My Image" w="100%" h="auto" />
-                    <Text textAlign="center">Bottle ID : 2 </Text>
-                  </Box>
-                )}
-              </Grid>
-              {!currentSellIds.includes(1) && !currentSellIds.includes(2) && (
-                <Text fontSize="lg">
-                  No bottles for sale now. Please note that only the first two bottles have their images hosted online in a decentralized way.
-                </Text>
-              )}
-            </Box>
+            <Box>
+                <Text fontSize="2xl" fontWeight="bold" mb={4}>Current Sells</Text>
+                  <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                    {currentSells.map((sell) => {
+                     if (sell.id === 1) {
+                      return (
+                        <Box key={sell.id}>
+                          <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/1.png" alt="My Image" w="100%" h="auto" />
+                          <Text textAlign="center">Bottle ID : {sell.id}</Text>
+                          <Text textAlign="center">Price : {web3.utils.fromWei((sell.price).toString(),'ether')} Ether </Text>
+                        </Box>
+                      );
+                    } if (sell.id === 2) {
+                      return (
+                        <Box key={sell.id}>
+                          <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/2.png" alt="My Image" w="100%" h="auto" />
+                          <Text textAlign="center">Bottle ID :  {sell.id}</Text>
+                          <Text textAlign="center">Price : {web3.utils.fromWei((sell.price).toString(),'ether')} Ether </Text>
+                        </Box>
+                      );
+                    }
+                    return  (
+                      <Text fontSize="lg">No bottles for sale now. Please note that only the first two bottles have their images hosted online in a decentralized way.</Text>
+                    );
+                  })}
+
+                  </Grid>
+              </Box>
 
       </Flex>
 
