@@ -77,7 +77,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
 
     /// Return the number of NFT created
     /// @dev return the current value of the tokenId
-  function getTotalSupply() public view onlyOwner returns (uint256) {
+  function getTotalSupply() public view  returns (uint256) {
     return _tokenId.current();
   }
 

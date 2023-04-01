@@ -1,0 +1,21 @@
+{"name":"WineNotBlockchain",
+"description":"Petrus",
+"image":"https://gateway.pinata.cloud/ipfs/QmQba8Sye7UgY8V61kKoTqXzonKmVQxRzQo6PS2vNnm3Cc?filename=2.png",
+"attributes": [
+    {
+      "trait_type": "Producer Name", 
+      "value": "Château Petrus"
+    }, 
+    {
+      "trait_type": "Designation Of Origin", 
+      "value": "Pomerol, Bordeaux, France"    
+    }, 
+    {
+      "trait_type": "Vintage", 
+      "value": "2005"
+    }, 
+    {
+      "trait_type": "Serial Number", 
+      "value": 2
+    }
+  ]}

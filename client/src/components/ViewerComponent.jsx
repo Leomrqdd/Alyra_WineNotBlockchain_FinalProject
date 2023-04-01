@@ -1,8 +1,7 @@
 import React from 'react';
-import { FormControl, FormLabel, Input, Button,Flex,Text } from "@chakra-ui/react";
+import { FormControl,Input, Button,Flex,Text,Box,Image,Grid } from "@chakra-ui/react";
 import useEth from "../contexts/EthContext/useEth";
 import { useState, useEffect} from 'react';
-const BigNumber = require('bignumber.js');
 
 
 
@@ -26,15 +25,9 @@ function ViewerComponent() {
   const [confirmShipment, setconfirmShipment] = useState(null);
   const [contestDelivery, setcontestDelivery] = useState([]);
   const [confirmDeliverylOldEvent, setconfirmDeliveryOldEvent] = useState([]);
-
-
-
-
-
-
-
-
-
+  const [totalSupply, setTotalSupply] = useState(null);
+  const [ownedIds, setOwnedIds] = useState([]);
+  const [currentSellIds, setCurrentSellIds] = useState([]);
 
 
 
@@ -162,6 +155,14 @@ function ViewerComponent() {
 
   };
 
+  const handleGetTotalSupply = async () => {
+    const info = await contract.methods
+    .getTotalSupply()
+    .call({ from: accounts[0] }); 
+
+    setTotalSupply(info);
+  };
+
 
 
 
@@ -241,6 +242,50 @@ function ViewerComponent() {
     };
     getPastConfirmEvents();
   }, [contract]);
+
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      setOwnedIds([]); // réinitialisation du tableau
+      const maxId = await contract.methods 
+      .getTotalSupply()
+      .call({ from: accounts[0] }); 
+
+      for (let i = 1; i <= maxId; i++) {
+        const owner = await contract.methods.getBottleOwner(i).call({ from: accounts[0]} ); 
+  
+        // Vérifie si l'utilisateur actuel est propriétaire de l'élément
+        if (owner === accounts[0]) {
+          // Ajoute l'élément à une liste pour l'affichage ultérieur
+          setOwnedIds(prevIds => [...prevIds, i]);
+        }
+      }
+    };
+  
+    fetchData();
+  }, [contract, accounts]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setCurrentSellIds([]); // réinitialisation du tableau
+      const maxId = await contract.methods 
+      .getTotalSupply()
+      .call({ from: accounts[0] }); 
+
+      for (let i = 1; i <= maxId; i++) {
+        const boolOnSale = await contract.methods.getBottleSaleInfo(i).call({ from: accounts[0]} )[1]; 
+  
+        // Vérifie si la bouteille est en vente
+        if (boolOnSale == "true") {
+          // Ajoute l'élément à une liste pour l'affichage ultérieur
+          setCurrentSellIds(prevIds => [...prevIds, i]);
+        }
+      }
+    };
+  
+    fetchData();
+  }, [contract, accounts]);
 
 
 
@@ -434,6 +479,12 @@ function ViewerComponent() {
               
             </div>
           )}
+          <Button mt="4" onClick={handleGetTotalSupply}>Get Total Supply</Button>
+         {totalSupply != undefined && (
+            <div>
+              <p> Total Supply : {totalSupply}</p>
+            </div>
+          )}
           <FormControl>
               <Input
               type="number"
@@ -443,7 +494,7 @@ function ViewerComponent() {
             />
           </FormControl>
 
-          <Button mt="4" onClick={handleGetBottleInfo}>Get Bottle Info</Button>
+          <Button mt="4" onClick={handleGetBottleInfo}>Get Bottle Information</Button>
           {bottleInfo.producer && (
             <div>
               <p>Producer Address : {bottleInfo.producer}</p>
@@ -516,6 +567,61 @@ function ViewerComponent() {
             </>
             )}
 
+            <Box>
+            {ownedIds.includes(1) || ownedIds.includes(2) ? (
+                <Text fontSize="2xl" fontWeight="bold" mb={4}>
+                  My Virtual Cave
+                </Text>
+            ) : null }
+            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                {ownedIds.includes(1) && (
+                  <Box>
+                    <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/1.png" alt="My Image" w="100%" h="auto" />
+                    <Text textAlign="center">Bottle ID : 1 </Text>
+
+                  </Box>
+                )}
+                {ownedIds.includes(2) && (
+                  <Box >
+                    <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/2.png" alt="My Image" w="100%" h="auto" />
+                    <Text textAlign="center">Bottle ID : 2 </Text>
+                  </Box>
+                )}
+              </Grid>
+              {!ownedIds.includes(1) && !ownedIds.includes(2) && (
+                <Text fontSize="lg">
+                  Buy a bottle to see it appear here. Please note that only the first two bottles have their images hosted online in a decentralized way.
+                </Text>
+              )}
+            </Box>
+
+            <Box>
+            {currentSellIds.includes(1) || currentSellIds.includes(2) ? (
+                <Text fontSize="2xl" fontWeight="bold" mb={4}>
+                  Bottles for Sale
+                </Text>
+            ) : null }
+            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                {currentSellIds.includes(1) && (
+                  <Box>
+                    <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/1.png" alt="My Image" w="100%" h="auto" />
+                    <Text textAlign="center">Bottle ID : 1 </Text>
+
+                  </Box>
+                )}
+                {currentSellIds.includes(2) && (
+                  <Box >
+                    <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/2.png" alt="My Image" w="100%" h="auto" />
+                    <Text textAlign="center">Bottle ID : 2 </Text>
+                  </Box>
+                )}
+              </Grid>
+              {!currentSellIds.includes(1) && !currentSellIds.includes(2) && (
+                <Text fontSize="lg">
+                  No bottles for sale now. Please note that only the first two bottles have their images hosted online in a decentralized way.
+                </Text>
+              )}
+            </Box>
 
       </Flex>
 

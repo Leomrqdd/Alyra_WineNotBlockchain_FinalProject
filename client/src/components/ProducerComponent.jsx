@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormLabel, Input, Button,Flex,Text } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input, Button,Flex,Text, Image, Grid, Box } from "@chakra-ui/react";
 import useEth from "../contexts/EthContext/useEth";
 import { useState, useEffect} from 'react';
 
@@ -25,6 +25,11 @@ function ProducerComponent() {
     const [bottleShippingOldEvent, setBottleShippingOldEvent] = useState([]);
     const [confirmedDeliveryOldEvent, setConfirmedDeliveryOldEvent] = useState([]);
     const [contestedDeliveryOldEvent, setContestedDeliveryOldEvent] = useState([]);
+    const [oldMintEvent, setOldMintEvent] = useState([]);
+    const [hasProduction, setHasProduction] = useState(null);
+
+
+
 
     const [sentBottles, setSentBottles] = useState([]);
 
@@ -121,10 +126,9 @@ function ProducerComponent() {
 
     };
 
-
     
 
-    
+ 
     useEffect(() => {
     
       const printMintEvent = async () => {
@@ -200,15 +204,24 @@ function ProducerComponent() {
       };
       getPastContestEvents();
     }, [contract]);
-  
-  
-  
-  
-  
-  
 
 
-
+    useEffect(() => {
+      const getPastMintEvents = async () => {
+        const events = await contract.getPastEvents("BottleCreation", {
+          fromBlock: 0,
+          toBlock: "latest"
+        });
+        setOldMintEvent(events);
+        const bool = oldMintEvent.some(event => event.returnValues._owner == accounts[0]);
+        setHasProduction(bool);
+        console.log(bool)
+      };
+      getPastMintEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [contract, accounts, hasProduction]);
+  
+  
 
     return (
       <>
@@ -471,9 +484,37 @@ function ProducerComponent() {
             {bottleStatus > 5 && <p>Bottle Status : Unknown</p>}
           </>
           )}
-            
+
+          <Box>
+            {hasProduction && <Text fontSize="2xl" fontWeight="bold" mb={4}>My Production</Text>}
+            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+              {oldMintEvent.map((event) => {
+                if (event.returnValues._owner == accounts[0]) {
+                  if (event.returnValues.id == "1") {
+                    return (
+                      <Box key={event.id}>
+                        <Image src="https://gateway.pinata.cloud/ipfs/QmNUmQTgJ23n2jojDFx1jhWFtk6j93zHfUnTRYMG47ttki?filename=1.png" alt="My Image" w="100%" h="auto" />
+                        <Text textAlign="center">Bottle ID : {event.returnValues.id}</Text>
+                      </Box>
+                    );
+                  } else if (event.returnValues.id == "2") {
+                    return (
+                      <Box key={event.id}>
+                        <Image src="https://gateway.pinata.cloud/ipfs/QmQba8Sye7UgY8V61kKoTqXzonKmVQxRzQo6PS2vNnm3Cc?filename=2.png" alt="My Image" w="100%" h="auto" />
+                        <Text textAlign="center">Bottle ID :  {event.returnValues.id}</Text>
+                      </Box>
+                    );
+                  }
+                }
+                return null;
+              })}
+            </Grid>
+            {!hasProduction && <Text fontSize="lg">You need to mint Bottle to see your production Here</Text>}
+          </Box>
+
           
         </Flex>
+        
 
       </Flex>
       </>

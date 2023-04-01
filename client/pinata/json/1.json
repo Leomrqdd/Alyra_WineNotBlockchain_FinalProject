@@ -1,0 +1,21 @@
+{"name":"WineNotBlockchain",
+"description":"Château Lafite Rothschild",
+"image":"https://gateway.pinata.cloud/ipfs/QmNUmQTgJ23n2jojDFx1jhWFtk6j93zHfUnTRYMG47ttki?filename=1.png",
+"attributes": [
+    {
+      "trait_type": "Producer Name", 
+      "value": "Château Lafite Rothschild"
+    }, 
+    {
+      "trait_type": "Designation Of Origin", 
+      "value": "Pauillac, Médoc, Bordeaux, France"
+    }, 
+    {
+      "trait_type": "Vintage", 
+      "value": "2001"
+    }, 
+    {
+      "trait_type": "Serial Number", 
+      "value": 1
+    }
+  ]}
