@@ -428,7 +428,7 @@ function AdminComponent() {
           </>
           )}
 
-        <Text style={{color: 'red', fontStyle: 'italic', fontSize: '18px'}}>
+        <Text style={{color: 'red', fontStyle: 'italic', fontSize: '16px'}}>
           <div>
               <ul>
                 {contestedDeliveryOldEvent.map((event) => (
@@ -440,7 +440,7 @@ function AdminComponent() {
             </div>     
         </Text>
 
-        <Text style={{color: 'green', fontStyle: 'italic', fontSize: '18px'}}>
+        <Text style={{color: 'green', fontStyle: 'italic', fontSize: '16px'}}>
           <div>
               <ul>
                 {confirmedDeliveryOldEvent.map((event) => (
