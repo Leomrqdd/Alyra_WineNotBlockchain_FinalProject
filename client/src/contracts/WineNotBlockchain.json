@@ -45470,10 +45470,16 @@
       "links": {},
       "address": "0xb2Ef792dE48c319f1B0ac891d1F1B913A8a18377",
       "transactionHash": "0x3dba6de098cd13791bcd0db513e8e4f3cb8e7ff7090c95afab3952451a4423ab"
+    },
+    "1680422721833": {
+      "events": {},
+      "links": {},
+      "address": "0x42F63464a3083595a1Cd1bD13b185615e290058b",
+      "transactionHash": "0xbb24f91a942b31e1384b7bfa5e879f7d0525a74af0af0242a0de07e3b9b933ff"
     }
   },
   "schemaVersion": "3.4.11",
-  "updatedAt": "2023-04-01T12:59:35.421Z",
+  "updatedAt": "2023-04-02T08:05:35.629Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Léo MARQUAND, Alyra, Promo SATOSHI",

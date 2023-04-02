@@ -12,6 +12,11 @@ import {
     Text,
   } from '@chakra-ui/react';
 
+  import { EditIcon } from '@chakra-ui/icons'
+  import { InfoOutlineIcon } from '@chakra-ui/icons';
+
+
+
 
 function AdminComponent() {
 
@@ -228,9 +233,12 @@ function AdminComponent() {
           bg="#f2f2f2"
           direction="column"
           align="center"
-          justify="center"
           overflowY="auto"
         >
+            <Box mt="4" mb="4" display="flex" justifyContent="center" alignItems="flex-start" >
+              <EditIcon w={20} h={20} color="gray.500" />
+            </Box>
+
             <FormControl id="producerAddress">
               <Input
                 type="text"
@@ -286,10 +294,11 @@ function AdminComponent() {
           bg="gray.50"
           direction="column"
           align="center"
-          justify="center"
           overflowY="auto"
           >
-
+            <Box mt="4" mb="2" display="flex" justifyContent="center">
+              <InfoOutlineIcon w={20} h={20} color="gray.500" />
+            </Box>
 
          <Button mt="4" onClick={handleGetTotalSupply}>Get Total Supply</Button>
          {totalSupply != undefined && (

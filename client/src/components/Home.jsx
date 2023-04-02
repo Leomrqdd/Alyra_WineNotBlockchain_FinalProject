@@ -61,7 +61,7 @@ function Home() {
     return (
       <>
 
-          <Box className="navbar" h="64px">
+          <Box className="navbar" h="80px">
             <Navbar userType={userType} />
           </Box>
 
@@ -73,9 +73,10 @@ function Home() {
           
           <Flex
             w="100%"
-            h="calc(100vh - 64px)"
+            h="calc(100vh - 30px)"
             alignItems="center"
             justifyContent="center"
+            overflowY="auto"
           >
               {userType === "owner" ? (
                 <AdminComponent />
@@ -90,7 +91,7 @@ function Home() {
 
           <Flex
           w="100%"
-          h="calc(100vh - 64px)"
+          h="calc(100vh - 80px)"
           alignItems="center"
           justifyContent="center"
           >
@@ -105,7 +106,7 @@ function Home() {
 
         <Flex
           w="100%"
-          h="calc(100vh - 64px)"
+          h="calc(100vh - 80px)"
           alignItems="center"
           justifyContent="center"
         >
