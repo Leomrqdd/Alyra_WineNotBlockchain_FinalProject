@@ -544,7 +544,7 @@ function ProducerComponent() {
                 return null;
               })}
             </Grid>
-            {!hasProduction && <Text fontSize="lg">You need to mint Bottle to see your production Here</Text>}
+            {!hasProduction && <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="4" mt="8" >You need to mint a Bottle to see your production Here</Text>}
           </Box>
 
           

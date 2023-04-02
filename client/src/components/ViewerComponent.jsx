@@ -31,6 +31,8 @@ function ViewerComponent() {
   const [totalSupply, setTotalSupply] = useState(null);
   const [ownedIds, setOwnedIds] = useState([]);
   const [currentSells, setCurrentSells] = useState([]);
+  const [currentSellBool, setCurrentSellBool] = useState(false);
+
 
 
 
@@ -610,11 +612,9 @@ function ViewerComponent() {
             )}
 
             <Box>
-            {ownedIds.includes(1) || ownedIds.includes(2) ? (
                 <Text fontSize="2xl" fontWeight="bold" mb={4}>
                   My Virtual Cave
                 </Text>
-            ) : null }
             <Grid templateColumns="repeat(4, 1fr)" gap={6}>
                 {ownedIds.includes(1) && (
                   <Box>
@@ -631,7 +631,7 @@ function ViewerComponent() {
                 )}
               </Grid>
               {!ownedIds.includes(1) && !ownedIds.includes(2) && (
-                <Text fontSize="lg">
+                <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="4" >
                   Buy a bottle to see it appear here. Please note that only the first two bottles have their images hosted online in a decentralized way.
                 </Text>
               )}
@@ -659,13 +659,17 @@ function ViewerComponent() {
                         </Box>
                       );
                     }
-                    return  (
-                      <Text fontSize="lg">No bottles for sale now. Please note that only the first two bottles have their images hosted online in a decentralized way.</Text>
+                    else  (
+                      <Text fontSize="lg">Error</Text>
                     );
                   })}
 
                   </Grid>
+                  {currentSells.length===0 && (
+                    <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="7">No bottles for sale now. Please note that only the first two bottles have their images hosted online in a decentralized way.</Text>
+                    )}
               </Box>
+
 
       </Flex>
 

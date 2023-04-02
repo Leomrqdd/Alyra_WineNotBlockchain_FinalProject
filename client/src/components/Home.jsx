@@ -116,7 +116,14 @@ function Home() {
           </Text>
 
         </Flex>
+
+        
       )}
+
+      <Box className="footer" h="30px" bg="gray.50" display="flex" justifyContent="center" alignItems="center">
+        <Text fontSize="12px" fontWeight="bold" color="#211b59">Copyright © 2023 WineNotBlockchain - Alyra - Promo SATOSHI - Léo & Loic & Bertrand & Pauline</Text>
+      </Box>
+
     </>
     );
   }
