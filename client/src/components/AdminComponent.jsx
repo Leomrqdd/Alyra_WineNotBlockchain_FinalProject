@@ -221,10 +221,10 @@ function AdminComponent() {
 
       return (
         <>
-        <Flex w="100%" h="calc(100vh - 64px)" marginTop="200px">
+        <Flex w="100%" h="calc(100vh - 100px)" marginTop="100px" overflowY="auto">
           <Flex
           w="50%"
-          h="100%"
+          h="calc(100vh - 100px)"
           bg="#f2f2f2"
           direction="column"
           align="center"
@@ -264,11 +264,10 @@ function AdminComponent() {
             <Button mt="4" onClick={checkProducer}>
               Check a Producer
             </Button>
-            {message && <Text mt="4">{message}</Text>}
-
-            <Text mt="4">
+            {message && <Text mt="4" style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>{message}</Text>}
+            <Text mt="4" >
               {eventWhitelist && eventWhitelist[1] !== undefined && (
-              <p>
+              <p >
                   Address: {eventWhitelist[0]} | Whitelisted: {eventWhitelist[1].toString()}
               </p>
               )}
@@ -283,7 +282,7 @@ function AdminComponent() {
 
           <Flex 
           w="50%" 
-          h="100%" 
+          h="calc(100vh - 100px)"
           bg="gray.50"
           direction="column"
           align="center"
@@ -295,7 +294,7 @@ function AdminComponent() {
          <Button mt="4" onClick={handleGetTotalSupply}>Get Total Supply</Button>
          {totalSupply != undefined && (
             <div>
-              <p> TotalSupply : {totalSupply}</p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}} > TotalSupply : {totalSupply}</p>
             </div>
           )}
           <FormControl>
@@ -309,7 +308,7 @@ function AdminComponent() {
           <Button mt="4" onClick={handleGetBottleOwner}>Get Bottle Owner</Button>
           {bottleOwner != undefined && (
             <div>
-              <p>Bottle Owner : {bottleOwner}</p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Bottle Owner : {bottleOwner}</p>
             </div>
           )}
 
@@ -325,11 +324,23 @@ function AdminComponent() {
         <Button mt="4" onClick={handleGetBottleInfo}>Get Bottle Info</Button>
         {bottleInfo.producer && (
           <div>
-            <p>Producer Address : {bottleInfo.producer}</p>
-            <p>Producer Name : {bottleInfo.producerName}</p>
-            <p>Designation of Origin: {bottleInfo.designationOfOrigin}</p>
-            <p>Vintage: {bottleInfo.vintage}</p>
-            <p>Serial Number: {bottleInfo.serialNumber}</p>
+            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+              Producer Address : {bottleInfo.producer}
+            </p>
+            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Producer Name : {bottleInfo.producerName}
+              </span>
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Designation of Origin : {bottleInfo.designationOfOrigin}
+              </span>
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Vintage : {bottleInfo.vintage}
+              </span>
+              <span style={{display: "inline-block"}}>
+                Serial Number : {bottleInfo.serialNumber}
+              </span>
+            </p>
           </div>
         )}
         <FormControl>
@@ -344,8 +355,16 @@ function AdminComponent() {
         <Button mt="4" onClick={handleGetBottleInfoSale}>Get Bottle Info Sale</Button>
         {bottleInfoSale.price && (
           <div>
-            <p>Bottle Sale : {(bottleInfoSale.onSale).toString()}</p>
-            <p>Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether</p>
+            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Bottle Sale : {(bottleInfoSale.onSale).toString()}
+              </span>
+              {bottleInfoSale.onSale == true && ( 
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether
+              </span>
+              )}
+            </p>
           </div>
         )}
 
@@ -363,10 +382,16 @@ function AdminComponent() {
         <div>
           {bottleSales.map((Sale, index) => (
             <div key={index}>
-              <p>Seller: {Sale.seller}</p>
-              <p>Buyer: {Sale.buyer}</p>
-              <p>Price: {web3.utils.fromWei(Sale.price.toString(), 'ether')} Ether </p>
-              <p>Timestamp: {Sale.timestamp}</p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Seller: {Sale.seller}</p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Buyer: {Sale.buyer}</p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+                <span style={{display: "inline-block", marginRight: "10px"}}>
+                  Price: {web3.utils.fromWei(Sale.price.toString(), 'ether')} Ether 
+                </span>
+                <span style={{display: "inline-block", marginRight: "10px"}}>
+                  Timestamp: {Sale.timestamp}
+                </span>
+              </p>
            </div>
           ))}
         </div>
@@ -384,17 +409,17 @@ function AdminComponent() {
           <Button mt="4" onClick={handleGetBottleStatus}>Get Bottle Status</Button>
           {bottleStatus != undefined && (
           <>
-            {bottleStatus == 0 && <p>Bottle Status : Mint</p>}
-            {bottleStatus == 1 && <p>Bottle Status : Asked for Shipping</p>}
-            {bottleStatus == 2 && <p>Bottle Status : Shipped</p>}
-            {bottleStatus == 3 && <p>Bottle Status : Received</p>}
-            {bottleStatus == 4 && <p>Bottle Status : Contested</p>}
-            {bottleStatus == 5 && <p>Bottle Status : lost</p>}
-            {bottleStatus > 5 && <p>Bottle Status : Unknown</p>}
+            {bottleStatus == 0 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Mint</p>}
+            {bottleStatus == 1 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Asked for Shipping</p>}
+            {bottleStatus == 2 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Shipped</p>}
+            {bottleStatus == 3 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Received</p>}
+            {bottleStatus == 4 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Contested</p>}
+            {bottleStatus == 5 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : lost</p>}
+            {bottleStatus > 5 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Unknown</p>}
           </>
           )}
 
-        <Text>
+        <Text style={{color: 'red', fontStyle: 'italic', fontSize: '18px'}}>
           <div>
               <ul>
                 {contestedDeliveryOldEvent.map((event) => (
@@ -406,7 +431,7 @@ function AdminComponent() {
             </div>     
         </Text>
 
-        <Text>
+        <Text style={{color: 'green', fontStyle: 'italic', fontSize: '18px'}}>
           <div>
               <ul>
                 {confirmedDeliveryOldEvent.map((event) => (
@@ -420,9 +445,8 @@ function AdminComponent() {
           </Text>
             
 
-
-
           </Flex>
+
 
         </Flex>
         </>
