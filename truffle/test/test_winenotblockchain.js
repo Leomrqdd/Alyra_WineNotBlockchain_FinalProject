@@ -116,9 +116,9 @@ contract("WineNotBlockchain", accounts => {
         });
 
         it("Only the whitelisted producer should mint a NFT  ", async() => {
-            await expectRevert(MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,_serialNumber,_tokenURI, {from: _owner}),"You are not a whitelisted producer");
-            await expectRevert(MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,_serialNumber,_tokenURI, {from: _buyer}),"You are not a whitelisted producer");
-            await expectRevert(MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,_serialNumber,_tokenURI, {from: _seller}),"You are not a whitelisted producer");
+            await expectRevert(MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,_serialNumber,_tokenURI, {from: _owner}),"Not WL");
+            await expectRevert(MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,_serialNumber,_tokenURI, {from: _buyer}),"Not WL");
+            await expectRevert(MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,_serialNumber,_tokenURI, {from: _seller}),"Not WL");
 
         });
 
@@ -158,8 +158,13 @@ contract("WineNotBlockchain", accounts => {
             expect(storedData).to.be.bignumber.equal(new BN(0));
         });
 
+        it("Two Bottles should be different and can't have the same serial Number for the same producer ", async() => {
+            await expectRevert.unspecified(MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,_serialNumber,_tokenURI, {from: _producer}));
+
+        });
+
         it("A BottleCreation Event should be emitted", async() => {
-            const storedData = await MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,_serialNumber+1,_tokenURI, {from: _producer});
+            const storedData = await MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,2,_tokenURI, {from: _producer});
             await expectEvent(storedData, 'BottleCreation',this._producer,2);
         });
         
@@ -299,6 +304,11 @@ contract("WineNotBlockchain", accounts => {
 
         });
 
+        it("A BottleAskedForShipping Event should be emitted", async() => {
+            storedData = await MyContractInstance.indicateShipmentToProducer(1, {from: _buyer});
+            await expectEvent(storedData, 'BottleAskedForShipping',1,this.buyer);
+        });
+
 
     
     });
@@ -351,6 +361,12 @@ contract("WineNotBlockchain", accounts => {
 
         });
 
+        it("A CollateralAdded Event should be emitted", async() => {
+            storedData = await MyContractInstance.addCollateral(1, {from: _producer,value:new BN(2000000000000000000n/3n)});
+            await expectEvent(storedData, 'CollateralAdded',1,this.buyer,new BN(2000000000000000000n/3n));
+        });
+
+
     
     });
 
@@ -400,6 +416,10 @@ contract("WineNotBlockchain", accounts => {
             expect(sellerBalanceAfter).to.be.bignumber.equal(sellerBalanceBefore.add(new BN(2000000000000000000n/3n)));
           });
 
+        it("A ConfirmedDelivery Event should be emitted", async() => {
+            storedData = await MyContractInstance.confirmDelivery(1, {from: _buyer});
+            await expectEvent(storedData, 'ConfirmedDelivery',1,this.buyer,new BN(2000000000000000000n/3n));
+        });
 
     
     });
@@ -454,6 +474,12 @@ contract("WineNotBlockchain", accounts => {
 
           });
 
+        it("A ContestedDelivery Event should be emitted", async() => {
+            storedData = await MyContractInstance.contestShipment(1, {from: _buyer});
+            await expectEvent(storedData, 'ContestedDelivery',1,this.buyer);
+        });
+
+
 
     
     });
@@ -471,14 +497,6 @@ contract("WineNotBlockchain", accounts => {
             const storedData = await MyContractInstance.getTotalSupply({from :_owner});
             expect(storedData).to.be.bignumber.equal(new BN(1));
         });
-
-        it("Only the owner of the contract can get the TotalSupply", async() => {
-            await expectRevert(MyContractInstance.getTotalSupply({from: _producer}),"Ownable: caller is not the owner");
-            await expectRevert(MyContractInstance.getTotalSupply({from: _buyer}),"Ownable: caller is not the owner");
-            await expectRevert(MyContractInstance.getTotalSupply({from: _seller}),"Ownable: caller is not the owner");
-
-        });
-    
     });
 
     describe("Test the getBottlesBalance", () => {

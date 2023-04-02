@@ -143,8 +143,6 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     return(idToCollateral[_id]);
 }
 
-
-
 // ::::::::::::: REGISTRATION OF PRODUCERS ::::::::::::: // 
 
     /// Whistelist a producer
@@ -175,8 +173,6 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
 
 // ::::::::::::: MINT OF BOTTLES ::::::::::::: // 
 
- 
-
   /// A producer can mint a Bottle
   /// @param _producerName, _designationOfOrigin,_vintage,_serialNumber,_tokenURI All the info about a Bottle
   /// @dev a producer can mint a ERC721 of one of his Bottles
@@ -189,8 +185,13 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     )
       external returns (uint)
     {
-      require(producerWhitelist[msg.sender], "You are not a whitelisted producer");
-
+      require(producerWhitelist[msg.sender],"Not WL");
+      for (uint i = 0; i < idToWineBottle.length; i++) {
+        WineBottle memory existingBottle = idToWineBottle[i];
+        if (existingBottle.producer == msg.sender && existingBottle.serialNumber == _serialNumber) { 
+          revert("Same SN");
+         }
+      }
       address _producer = msg.sender;
       _tokenId.increment();
       uint newItemId = _tokenId.current();
@@ -203,10 +204,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
       return newItemId;
     }
 
-
-
 // ::::::::::::: BUY AND SELL BOTTLES ::::::::::::: // 
-
 
   /// Record a Sale of a Bottle 
   /// @param _id,_seller,_buyer,_price all the Info about a sale
@@ -253,8 +251,6 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
 
     emit BottleTransfer(_seller,_buyer,_id, _price);
 }
-
-
 
 // ::::::::::::: SHIPMENT ::::::::::::: // 
 
