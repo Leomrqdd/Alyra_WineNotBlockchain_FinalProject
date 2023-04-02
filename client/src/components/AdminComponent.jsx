@@ -101,7 +101,7 @@ function AdminComponent() {
         if (isWhitelisted) {
           setMessage('The producer is whitelisted.');
         } else {
-          setMessage('The producer is now whitelisted.');
+          setMessage('The producer is not whitelisted.');
         }
       };
 
@@ -272,18 +272,20 @@ function AdminComponent() {
             <Button mt="4" onClick={checkProducer}>
               Check a Producer
             </Button>
-            {message && <Text mt="4" style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>{message}</Text>}
-            <Text mt="4" >
+            {message && <Text mt="2" style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>{message}</Text>}
+            <Text mt="2" style={{fontSize: "14px", fontStyle: "italic", color: "#555"}} >
               {eventWhitelist && eventWhitelist[1] !== undefined && (
               <p >
-                  Address: {eventWhitelist[0]} | Whitelisted: {eventWhitelist[1].toString()}
+                  Producer Address: {eventWhitelist[0]} | Whitelisted: {eventWhitelist[1].toString()}
               </p>
               )}
             </Text>
 
             <ul>
               {whitelistedProducers.map((event, index) => (
-                <li key={index}>{`${event.returnValues._address} , ${event.returnValues.whitelist}`}</li>
+                <li key={index} style={{fontSize: "16px", fontStyle: "italic", color: "#555"}} >
+                  Producer Address: {`${event.returnValues._address}`} , Whitelisted : {`${event.returnValues.whitelist}`}
+                </li>
                     ))}
             </ul>
           </Flex>   

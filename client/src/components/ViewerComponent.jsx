@@ -2,6 +2,9 @@ import React from 'react';
 import { FormControl,Input, Button,Flex,Text,Box,Image,Grid } from "@chakra-ui/react";
 import useEth from "../contexts/EthContext/useEth";
 import { useState, useEffect} from 'react';
+import { EditIcon } from '@chakra-ui/icons'
+import { InfoOutlineIcon } from '@chakra-ui/icons';
+
 
 
 
@@ -305,19 +308,21 @@ function ViewerComponent() {
 
   return (
     <>
-    <Flex w="100%" h="calc(100vh - 64px)" marginTop="200px">
+    <Flex w="100%" h="calc(100vh - 100px)" marginTop="100px" overflowY="auto">
       <Flex
-        w="50%"
-        h="100%"
-        bg="#f2f2f2"
-        direction="column"
-        align="center"
-        justify="center"
-        overflowY="auto"
+          w="50%"
+          h="calc(100vh - 100px)"
+          bg="#f2f2f2"
+          direction="column"
+          align="center"
+          overflowY="auto"
       >
+        <Box mt="4" mb="4" display="flex" justifyContent="center" alignItems="flex-start" >
+          <EditIcon w={20} h={20} color="gray.500" />
+        </Box>
         <FormControl>
           <Input
-            type="text"
+            type="number"
             value={id}
             onChange={(e) => setId(e.target.value)}
             placeholder="Enter bottle ID"
@@ -331,7 +336,7 @@ function ViewerComponent() {
 
         <Text mt="4">
             {bottleTransfer.length > 0  && (
-              <p> You have bought the bottle with the id {bottleTransfer[2]}, 
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "green"}} > You have bought the bottle with the id {bottleTransfer[2]}, 
               at a price of {web3.utils.fromWei(bottleTransfer[3].toString(), 'ether')} Ether
               </p>
               
@@ -362,7 +367,7 @@ function ViewerComponent() {
 
           <Text mt="4">
             {saleEvent.length > 0  && (
-              <p>the bottle with the id {saleEvent[0]} is now for sale for {saleEvent[1]} Ether </p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "green"}} >the bottle with the id {saleEvent[0]} is now for sale for {saleEvent[1]} Ether </p>
           )}
           </Text>
 
@@ -377,21 +382,25 @@ function ViewerComponent() {
 
           <Button mt="4" onClick={handleGetBottleShipping}> Ask for Shipment </Button>
           {bottleShippingEvent.length > 0 && (
-          <div>
-            <p>The Bottle with the id {bottleShippingEvent[0]} will be shipped soon by the producer. Wait for him to put some collateral to guarantee the delivery.</p>
-            <p>Please wait to receive it and confirm the reception ASAP.</p>
-            <p>You can check the status of your Bottle on the right.</p> 
-          </div>
+            <Text style={{fontSize: "14px", fontStyle: "italic", color: "green"}} >
+            The Bottle with the id {bottleShippingEvent[0]} will be shipped soon by the producer. Wait for him to put some collateral to guarantee the delivery.
+            <br />
+            Please wait to receive it and confirm the reception ASAP.
+            <br />
+            You can check the status of your Bottle on the right.
+            </Text>
           )}
           
-          <Text mt="4">
+          <Text mb="3" mt="1" style={{fontSize: "14px", fontStyle: "italic", color: "green"}}>
             <div>
               <ul >
                 {bottleCollateralOldEvent.map((event) => (
-                  <li key={event.id}>
+                  <li key={event.id} >
                     The producer with the address {event.returnValues.from} has added a collateral of {web3.utils.fromWei(event.returnValues.value.toString(), "ether")} Ether for the the Bottle with the id {event.returnValues.id}.
-                    The Bottle is now shipped !
-                    Please confirm the delivery if you receive your Bottle within 2 weeks. If not, please contest.
+                    <br />
+                    The Bottle is now shipped ! 
+                    <br />
+                    Please confirm the delivery if you receive your Bottle within 2 weeks. If not, contest.
                   </li>
                 ))}
               </ul>
@@ -411,7 +420,7 @@ function ViewerComponent() {
           Confirm Delivery
         </Button>
 
-        <Text mt="4">
+        <Text mb="3" mt="1" style={{fontSize: "14px", fontStyle: "italic", color: "green"}}>
             <div>
               <ul>
                 {confirmDeliverylOldEvent.map((event) => (
@@ -439,7 +448,7 @@ function ViewerComponent() {
           Contest Delivery
         </Button>
 
-        <Text mt="4">
+        <Text mb="3" mt="1" style={{fontSize: "14px", fontStyle: "italic", color: "red"}}>
             {contestDelivery.length > 0  && (
               <p>
                 the shipment of the bottle with the id {contestDelivery[0]} is now contested. Please wait for WineNotBlockchain or an arbitrator to solve the issue.
@@ -447,25 +456,24 @@ function ViewerComponent() {
                 Please confirm when you got it.
               </p>
           )}
-          </Text>
-
-
-        
-
-
+        </Text>
 
       </Flex>
 
 
+
       <Flex 
-      w="50%" 
-      h="100%" 
-      bg="gray.50"
-      direction="column"
-      align="center"
-      justify="center"
-      overflowY="auto"
+          w="50%" 
+          h="calc(100vh - 100px)"
+          bg="gray.50"
+          direction="column"
+          align="center"
+          overflowY="auto"
       >
+          <Box mt="4" mb="2" display="flex" justifyContent="center">
+           <InfoOutlineIcon w={20} h={20} color="gray.500" />
+          </Box>
+
           <FormControl>
               <Input
               type="number"
@@ -476,22 +484,22 @@ function ViewerComponent() {
           </FormControl>
           <Button mt="4" onClick={handleGetBottleOwner}>Get Bottle Owner</Button>
           {bottleOwner != undefined && (
-            <div>
-              <p>Bottle Owner : {bottleOwner}</p>
-            </div>
+            <Text>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Owner : {bottleOwner}</p>
+            </Text>
           )}
           <Button mt="4" onClick={handleGetBottleBalance}>Get Bottle Balance</Button>
           {bottleBalance != undefined && (
-            <div>
-              <p>Bottle Balance of your address : {bottleBalance}</p>
+            <Text>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Balance of your address : {bottleBalance}</p>
               
-            </div>
+            </Text>
           )}
           <Button mt="4" onClick={handleGetTotalSupply}>Get Total Supply</Button>
          {totalSupply != undefined && (
-            <div>
-              <p> Total Supply : {totalSupply}</p>
-            </div>
+            <Text>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Total Supply : {totalSupply}</p>
+            </Text>
           )}
           <FormControl>
               <Input
@@ -504,13 +512,25 @@ function ViewerComponent() {
 
           <Button mt="4" onClick={handleGetBottleInfo}>Get Bottle Information</Button>
           {bottleInfo.producer && (
-            <div>
-              <p>Producer Address : {bottleInfo.producer}</p>
-              <p>Producer Name : {bottleInfo.producerName}</p>
-              <p>Designation of Origin: {bottleInfo.designationOfOrigin}</p>
-              <p>Vintage: {bottleInfo.vintage}</p>
-              <p>Serial Number: {bottleInfo.serialNumber}</p>
-            </div>
+          <Text>
+            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+              Producer Address : {bottleInfo.producer}
+            </p>
+            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Producer Name : {bottleInfo.producerName}
+              </span>
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Designation of Origin : {bottleInfo.designationOfOrigin}
+              </span>
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Vintage : {bottleInfo.vintage}
+              </span>
+              <span style={{display: "inline-block"}}>
+                Serial Number : {bottleInfo.serialNumber}
+              </span>
+            </p>
+           </Text>
           )}
 
           <FormControl>
@@ -524,10 +544,18 @@ function ViewerComponent() {
 
           <Button mt="4" onClick={handleGetBottleInfoSale}>Get Bottle Info Sale</Button>
           {bottleInfoSale.price && (
-            <div>
-              <p>Bottle Sale : {(bottleInfoSale.onSale).toString()}</p>
-              <p>Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether</p>
-            </div>
+           <Text>
+           <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+             <span style={{display: "inline-block", marginRight: "10px"}}>
+               Bottle Sale : {(bottleInfoSale.onSale).toString()}
+             </span>
+             {bottleInfoSale.onSale == true && ( 
+             <span style={{display: "inline-block", marginRight: "10px"}}>
+               Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether
+             </span>
+             )}
+           </p>
+         </Text>
           )}
 
           <FormControl>
@@ -541,16 +569,22 @@ function ViewerComponent() {
 
           <Button mt="4" onClick={handleGetBottleSales}>Get Bottle Sales History </Button>
           {bottleSales.length > 0 && (
-          <div>
+            <Text>
             {bottleSales.map((Sale, index) => (
               <div key={index}>
-                <p>Seller: {Sale.seller}</p>
-                <p>Buyer: {Sale.buyer}</p>
-                <p>Price : {web3.utils.fromWei(Sale.price.toString(), 'ether')} Ether </p>
-                <p>Timestamp: {Sale.timestamp}</p>
+                <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Seller: {Sale.seller}</p>
+                <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Buyer: {Sale.buyer}</p>
+                <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+                  <span style={{display: "inline-block", marginRight: "10px"}}>
+                    Price: {web3.utils.fromWei(Sale.price.toString(), 'ether')} Ether 
+                  </span>
+                  <span style={{display: "inline-block", marginRight: "10px"}}>
+                    Timestamp: {Sale.timestamp}
+                  </span>
+                </p>
             </div>
             ))}
-          </div>
+          </Text>
           )}
 
           <FormControl>
@@ -565,13 +599,13 @@ function ViewerComponent() {
             <Button mt="4" onClick={handleGetBottleStatus}>Get Bottle Status</Button>
             {bottleStatus != undefined && (
             <>
-              {bottleStatus == 0 && <p>Bottle Status : Mint</p>}
-              {bottleStatus == 1 && <p>Bottle Status : Asked for Shipping</p>}
-              {bottleStatus == 2 && <p>Bottle Status : Shipped</p>}
-              {bottleStatus == 3 && <p>Bottle Status : Received</p>}
-              {bottleStatus == 4 && <p>Bottle Status : Contested</p>}
-              {bottleStatus == 5 && <p>Bottle Status : lost</p>}
-              {bottleStatus > 5 && <p>Bottle Status : Unknown</p>}
+              {bottleStatus == 0 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Mint</p>}
+              {bottleStatus == 1 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Asked for Shipping</p>}
+              {bottleStatus == 2 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Shipped</p>}
+              {bottleStatus == 3 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Received</p>}
+              {bottleStatus == 4 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Contested</p>}
+              {bottleStatus == 5 && <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : lost</p>}
+              {bottleStatus > 5 &&  <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Unknown</p>}
             </>
             )}
 
@@ -585,14 +619,14 @@ function ViewerComponent() {
                 {ownedIds.includes(1) && (
                   <Box>
                     <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/1.png" alt="My Image" w="100%" h="auto" />
-                    <Text textAlign="center">Bottle ID : 1 </Text>
+                    <Text textAlign="center" style={{fontSize: "18px", fontStyle: "bold", color: "#555"}} >Bottle ID : 1 </Text>
 
                   </Box>
                 )}
                 {ownedIds.includes(2) && (
                   <Box >
                     <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/2.png" alt="My Image" w="100%" h="auto" />
-                    <Text textAlign="center">Bottle ID : 2 </Text>
+                    <Text textAlign="center" style={{fontSize: "18px", fontStyle: "bold", color: "#555"}}>Bottle ID : 2 </Text>
                   </Box>
                 )}
               </Grid>
@@ -612,16 +646,16 @@ function ViewerComponent() {
                       return (
                         <Box key={sell.id}>
                           <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/1.png" alt="My Image" w="100%" h="auto" />
-                          <Text textAlign="center">Bottle ID : {sell.id}</Text>
-                          <Text textAlign="center">Price : {web3.utils.fromWei((sell.price).toString(),'ether')} Ether </Text>
+                          <Text textAlign="center" style={{fontSize: "18px", fontStyle: "bold", color: "#555"}} >Bottle ID : {sell.id}</Text>
+                          <Text textAlign="center" style={{fontSize: "18px", fontStyle: "bold", color: "#555"}} mb="4">Price : {web3.utils.fromWei((sell.price).toString(),'ether')} Ether </Text>
                         </Box>
                       );
                     } if (sell.id === 2) {
                       return (
                         <Box key={sell.id}>
                           <Image src="https://gateway.pinata.cloud/ipfs/Qmexe4NuF289cNvTraX737FpsgpJSwY75hoZYpkb9usH4D/2.png" alt="My Image" w="100%" h="auto" />
-                          <Text textAlign="center">Bottle ID :  {sell.id}</Text>
-                          <Text textAlign="center">Price : {web3.utils.fromWei((sell.price).toString(),'ether')} Ether </Text>
+                          <Text textAlign="center" style={{fontSize: "18px", fontStyle: "bold", color: "#555"}} >Bottle ID :  {sell.id}</Text>
+                          <Text textAlign="center" style={{fontSize: "18px", fontStyle: "bold", color: "#555"}} mb="4">Price : {web3.utils.fromWei((sell.price).toString(),'ether')} Ether </Text>
                         </Box>
                       );
                     }
