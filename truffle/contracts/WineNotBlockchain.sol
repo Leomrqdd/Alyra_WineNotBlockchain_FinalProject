@@ -48,7 +48,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
 
 
     event WhitelistedProducer(address _address, bool whitelist);
-    event BottleCreation(address _owner, uint id);
+    event BottleCreation(address _owner, uint id,string URI);
     event BottleForSale(uint id, uint price);
     event BottleTransfer(address from, address to, uint id, uint price);
     event BottleAskedForShipping(uint id, address from);
@@ -198,9 +198,8 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
       idToWineBottle.push(WineBottle(_producer,_producerName, _designationOfOrigin, _vintage, _serialNumber));
       idToSaleInfo.push(SaleInfo(0,false));
       _safeMint(_producer, newItemId);
-      _setTokenURI(newItemId, _tokenURI);
       idToBottleStatus[newItemId] = bottleStatus.minted;
-      emit BottleCreation(msg.sender,newItemId);
+      emit BottleCreation(msg.sender,newItemId,_tokenURI);
       return newItemId;
     }
 

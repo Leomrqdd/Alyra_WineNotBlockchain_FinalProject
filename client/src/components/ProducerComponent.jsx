@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormLabel, Input, Button,Flex,Text, Image, Grid, Box } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input, Button,Flex,Text, Image, Grid, Box, Select} from "@chakra-ui/react";
 import useEth from "../contexts/EthContext/useEth";
 import { useState, useEffect} from 'react';
 import { EditIcon } from '@chakra-ui/icons'
@@ -16,6 +16,8 @@ function ProducerComponent() {
     const [vintage, setVintage] = useState("");
     const [serialNumber, setSerialNumber] = useState("");
     const [tokenURI, setTokenURI] = useState("");
+    const [selectedImage, setSelectedImage] = useState("No Image");
+
     const [mintEvent, setMintEvent] = useState([]);
     const [price, setPrice] = useState('');
     const [price2, setPrice2] = useState('');
@@ -47,7 +49,17 @@ function ProducerComponent() {
     const [id6, setId6] = useState('');
 
 
+    const handleChange = (event) => {
+      setSelectedImage(event.target.value);
+      if (event.target.value === "Image Bottle 1") {
+        setTokenURI("https://gateway.pinata.cloud/ipfs/QmNUmQTgJ23n2jojDFx1jhWFtk6j93zHfUnTRYMG47ttki?filename=1.png");
+      } else if (event.target.value === "Image Bottle 2") {
+        setTokenURI("https://gateway.pinata.cloud/ipfs/QmQba8Sye7UgY8V61kKoTqXzonKmVQxRzQo6PS2vNnm3Cc?filename=2.png");
+      } else if (event.target.value === "No Image") {
+        setTokenURI("No Image")
+      }
 
+    };
 
 
     const handleMint = async () => {
@@ -277,13 +289,12 @@ function ProducerComponent() {
             />
           </FormControl>
           <FormControl>
-            <Input
-              type="text"
-              value={tokenURI}
-              onChange={(e) => setTokenURI(e.target.value)}
-              placeholder="Enter link to the NFT image"
+            <Select value={selectedImage} onChange={handleChange}>
+              <option value="Image Bottle 1">Image Bottle 1</option>
+              <option value="Image Bottle 2">Image Bottle 2</option>
+              <option value="No Image">No Image</option>
 
-            />
+            </Select>
           </FormControl>
           <Button mt="4" onClick={handleMint}>
             Mint Bottle
@@ -525,14 +536,14 @@ function ProducerComponent() {
             <Grid templateColumns="repeat(4, 1fr)" gap={6}>
               {oldMintEvent.map((event) => {
                 if (event.returnValues._owner == accounts[0]) {
-                  if (event.returnValues.id == "1") {
+                  if (event.returnValues.URI == "https://gateway.pinata.cloud/ipfs/QmNUmQTgJ23n2jojDFx1jhWFtk6j93zHfUnTRYMG47ttki?filename=1.png") {
                     return (
                       <Box key={event.id}>
                         <Image src="https://gateway.pinata.cloud/ipfs/QmNUmQTgJ23n2jojDFx1jhWFtk6j93zHfUnTRYMG47ttki?filename=1.png" alt="My Image" w="100%" h="auto" />
                         <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="4">Bottle ID : {event.returnValues.id}</Text>
                       </Box>
                     );
-                  } else if (event.returnValues.id == "2") {
+                  } else if (event.returnValues.URI == "https://gateway.pinata.cloud/ipfs/QmQba8Sye7UgY8V61kKoTqXzonKmVQxRzQo6PS2vNnm3Cc?filename=2.png") {
                     return (
                       <Box key={event.id}>
                         <Image src="https://gateway.pinata.cloud/ipfs/QmQba8Sye7UgY8V61kKoTqXzonKmVQxRzQo6PS2vNnm3Cc?filename=2.png" alt="My Image" w="100%" h="auto" />
