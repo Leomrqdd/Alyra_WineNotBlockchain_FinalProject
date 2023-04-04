@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
+
 pragma solidity 0.8.18;
  
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /// @author Léo MARQUAND, Alyra, Promo SATOSHI
 /// @title The Alyra Final Project which is named the WineNotBlockhain Marketplace
  
-contract WineNotBlockchain is ERC721URIStorage, Ownable {
+contract WineNotBlockchain is ERC721, Ownable {
 
     using Counters for Counters.Counter;
     Counters.Counter private _tokenId; 
@@ -35,7 +35,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
       uint256 timestamp;
   }
 
-  enum bottleStatus {minted, askedForShipping, shipped, received, contested, lost } //rajouter lost et gérer la partie contested ? 
+  enum bottleStatus {minted, askedForShipping, shipped, received, contested, lost }
 
     WineBottle[] idToWineBottle;
     SaleInfo[] idToSaleInfo;
@@ -55,6 +55,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     event CollateralAdded(uint id, address from, uint value);
     event ConfirmedDelivery(uint id, address from, uint value);
     event ContestedDelivery(uint id, address from);
+    
 
 
 
@@ -71,26 +72,26 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
  
     /// Return true if the Owner called the function
     /// @dev return a boolean to say if this is the Owner that called the function
-  function isCallerOwner() public view returns (bool) {
+  function isCallerOwner() external view returns (bool) {
     return (msg.sender == owner());
   }
 
     /// Return the number of NFT created
     /// @dev return the current value of the tokenId
-  function getTotalSupply() public view  returns (uint256) {
+  function getTotalSupply() external view  returns (uint256) {
     return _tokenId.current();
   }
 
     /// Return the number of NFT owned by the sender
     /// @dev return the balance of the sender
-  function getBottlesBalance() public view returns (uint) {
+  function getBottlesBalance() external view returns (uint) {
     return balanceOf(msg.sender);
   }
 
     /// Return info about a Bottle
     /// @param _id the Id of a existing Bottle
     /// @dev return the Bottle struct information 
-  function getBottleInfo(uint256 _id) public view returns (WineBottle memory) {
+  function getBottleInfo(uint256 _id) external view returns (WineBottle memory) {
     require (_id<=_tokenId.current(), "this id does not exist");
     return (idToWineBottle[_id]);
  }
@@ -98,30 +99,23 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
      /// Return the Status of the Bottle
     /// @param _id the Id of a existing Bottle
     /// @dev return the enum value associated to the Id
-  function getBottleStatus(uint256 _id) public view returns (bottleStatus) {
+  function getBottleStatus(uint256 _id) external view returns (bottleStatus) {
     require (_id<=_tokenId.current(), "this id does not exist");
     return (idToBottleStatus[_id]);
  }
 
-    /// Return info about a Bottle Image
-    /// @param _id the Id of a existing Bottle
-    /// @dev return the token URI uploaded on IPFS
-   function getBottleURI(uint256 _id) public view returns (string memory) {
-    require (_id<=_tokenId.current(), "this id does not exist");
-    return tokenURI(_id);
-    }
-
     /// Return the Owner of a Bottle
     /// @param _id the Id of a existing Bottle
     /// @dev return the address of the Owner of a Bottle
-  function getBottleOwner(uint256 _id) public view returns (address) {
+  function getBottleOwner(uint256 _id) external view returns (address) {
+    require (_id<=_tokenId.current(), "this id does not exist");
     return ownerOf(_id);
   }
 
     /// Return the current sale status of a Bottle
     /// @param _id the Id of a existing Bottle
     /// @dev return the price and the bool OnSale on a struct
-  function getBottleSaleInfo(uint256 _id) public view returns (SaleInfo memory) {
+  function getBottleSaleInfo(uint256 _id) external view returns (SaleInfo memory) {
     require (_id<=_tokenId.current(), "this id does not exist");
     return (idToSaleInfo[_id]);
  }
@@ -129,16 +123,16 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     /// Return all the Sales of a Bottle
     /// @param _id the Id of a existing Bottle
     /// @dev return an array of a struct Sales
-  function getSalesHistory(uint256 _id) public view returns (Sale[] memory) {
+  function getSalesHistory(uint256 _id) external view returns (Sale[] memory) {
     require(_id <= _tokenId.current(), "this id does not exist");
     return idToSales[_id];
 }
 
 
-    /// Return all the Sales of a Bottle
+    /// Return the collateral added for a Bottle 
     /// @param _id the Id of a existing Bottle
-    /// @dev return an array of a struct Sales
-  function getCollateralInfo(uint256 _id) public view returns (uint) {
+    /// @dev return the collateral added for a Bottle and 0 if no collateral is added
+  function getCollateralInfo(uint256 _id) external view returns (uint) {
     require(_id <= _tokenId.current(), "this id does not exist");
     return(idToCollateral[_id]);
 }
@@ -157,6 +151,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     /// @param _producer the address of a producer
     /// @dev delete the producer to a whitelist thanks to a bool value
     function revokeProducer(address _producer) external onlyOwner {
+      require(producerWhitelist[_producer] == true, "not whitelisted");
       producerWhitelist[_producer] = false;
       emit WhitelistedProducer(_producer,false);
 
@@ -175,7 +170,9 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
 
   /// A producer can mint a Bottle
   /// @param _producerName, _designationOfOrigin,_vintage,_serialNumber,_tokenURI All the info about a Bottle
-  /// @dev a producer can mint a ERC721 of one of his Bottles
+  /// @dev a producer can mint a ERC721 of one of his Bottles with metadatas onchain. 
+  /// @dev The token URI is linked to an image on IPFS but it is not stored on the blockchain. It is only here for display reasons.
+  /// @dev The mint allow to own a tokenId linked to metadatas on chain without proof of ownership of an image.
   function mintWineBottle (
       string calldata _producerName,
       string calldata _designationOfOrigin,
@@ -193,9 +190,9 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
          }
       }
       address _producer = msg.sender;
-      _tokenId.increment();
+      _tokenId.increment(); // 1 for the first tokenId
       uint newItemId = _tokenId.current();
-      idToWineBottle.push(WineBottle(_producer,_producerName, _designationOfOrigin, _vintage, _serialNumber));
+      idToWineBottle.push(WineBottle(_producer,_producerName, _designationOfOrigin, _vintage, _serialNumber)); //metadatas onchain
       idToSaleInfo.push(SaleInfo(0,false));
       _safeMint(_producer, newItemId);
       idToBottleStatus[newItemId] = bottleStatus.minted;
@@ -216,7 +213,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
   /// Sell a Bottle
   /// @param _id Id of the Bottle, _priceInEther Price in Ether
   /// @dev The owner of the ERC721 can sell it on the marketplace
-  function sellBottle(uint256 _id, uint256 _priceInEther) public {
+  function sellBottle(uint256 _id, uint256 _priceInEther) external {
     require(ownerOf(_id) == msg.sender, "You are not the owner of this WineBottle");
     require(_priceInEther > 0, "Price must be greater than zero");
     require(idToBottleStatus[_id] == bottleStatus.minted, "This bottle has been asked for shipping or is in a different state");
@@ -231,7 +228,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
   /// Buy a Bottle that is for sales
   /// @param _id the Id of the Bottle
   /// @dev a Buyer can buy a ERC721 that is for sales
-  function buyBottle(uint256 _id) public payable {
+  function buyBottle(uint256 _id) external payable {
     require(idToSaleInfo[_id].onSale, "This bottle is not for sale");
     require(msg.value == idToSaleInfo[_id].price, "The sent amount does not match the bottle price in Wei");
 
@@ -291,7 +288,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
 }
 
 
-  /// The owner of a WineBottle confirms that he has received the Bottle at his home. It will release the collateral
+  /// The owner of a WineBottle confirms that he has received the Bottle at his home. It will release the collateral.
   /// @param _id the Id of the Bottle
   /// @dev change the status of the Bottle to follow the shipment 
   function confirmDelivery(uint256 _id) external {
@@ -317,7 +314,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
   /// Once the issue is solved, the owner can confirm the delivery.
   /// @param _id the Id of the Bottle
   /// @dev change the status of the Bottle to follow the shipment 
-  function contestShipment(uint256 _id) public {
+  function contestShipment(uint256 _id) external {
     require(ownerOf(_id) == msg.sender, "You are not the owner of this WineBottle");
     require(idToBottleStatus[_id] != bottleStatus.contested, "This bottle has already been contested");
     require(idToBottleStatus[_id] != bottleStatus.received, "This bottle has already been received");
@@ -326,6 +323,7 @@ contract WineNotBlockchain is ERC721URIStorage, Ownable {
     emit ContestedDelivery(_id,msg.sender);
 
 }
+
 
 
 }

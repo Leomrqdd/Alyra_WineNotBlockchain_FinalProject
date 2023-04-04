@@ -10,7 +10,7 @@ import { InfoOutlineIcon } from '@chakra-ui/icons';
 
 function ProducerComponent() {
 
-    const { state: { contract, accounts,web3 } } = useEth();
+    const { state: { contract, accounts,web3, txhash } } = useEth();
     const [producerName, setProducerName] = useState("");
     const [designationOfOrigin, setDesignationOfOrigin] = useState("");
     const [vintage, setVintage] = useState("");
@@ -187,8 +187,9 @@ function ProducerComponent() {
     
     useEffect(() => {
       const getPastShippingEvents = async () => {
+        const deployTx = await web3.eth.getTransaction(txhash)
         const events = await contract.getPastEvents("BottleAskedForShipping", {
-          fromBlock: 0,
+          fromBlock: deployTx.blockNumber,
           toBlock: "latest"
         });
         setBottleShippingOldEvent(events);
@@ -199,8 +200,9 @@ function ProducerComponent() {
 
     useEffect(() => {
       const getPastConfirmEvents = async () => {
+        const deployTx = await web3.eth.getTransaction(txhash)
         const events = await contract.getPastEvents("ConfirmedDelivery", {
-          fromBlock: 0,
+          fromBlock: deployTx.blockNumber,
           toBlock: "latest"
         });
         setConfirmedDeliveryOldEvent(events);
@@ -211,8 +213,9 @@ function ProducerComponent() {
 
     useEffect(() => {
       const getPastContestEvents = async () => {
+        const deployTx = await web3.eth.getTransaction(txhash)
         const events = await contract.getPastEvents("ContestedDelivery", {
-          fromBlock: 0,
+          fromBlock: deployTx.blockNumber,
           toBlock: "latest"
         });
         setContestedDeliveryOldEvent(events);
@@ -223,14 +226,14 @@ function ProducerComponent() {
 
     useEffect(() => {
       const getPastMintEvents = async () => {
+        const deployTx = await web3.eth.getTransaction(txhash)
         const events = await contract.getPastEvents("BottleCreation", {
-          fromBlock: 0,
+          fromBlock: deployTx.blockNumber,
           toBlock: "latest"
         });
         setOldMintEvent(events);
         const bool = oldMintEvent.some(event => event.returnValues._owner == accounts[0]);
         setHasProduction(bool);
-        console.log(bool)
       };
       getPastMintEvents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -369,7 +372,7 @@ function ProducerComponent() {
                   <li key={event.id} style={{color: 'orange', fontStyle: 'italic', fontSize: '16px'}}>
                     The Bottle with the id {event.returnValues.id} was asked for Shipping by {event.returnValues.from}. 
                     Please add a minimum collateral of 1/3 of your initial price to guarantee the shipment.
-                    Then, communicate through the dedicated message app to gather all the shipment information fropm the owner.
+                    Then, communicate through the dedicated message app to gather all the shipment information from the owner.
                   </li>
                 ))}
               </ul>

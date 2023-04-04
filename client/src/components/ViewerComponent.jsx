@@ -12,7 +12,7 @@ import { InfoOutlineIcon } from '@chakra-ui/icons';
 
 function ViewerComponent() {
 
-  const { state: { contract, accounts,web3 } } = useEth();
+  const { state: { contract, accounts,web3, txhash} } = useEth();
   const [bottleTransfer, setBottleTransfer] = useState([]);
   const [price, setPrice] = useState('');
   const [saleEvent, setSaleEvent] = useState([]);
@@ -28,6 +28,7 @@ function ViewerComponent() {
   const [confirmShipment, setconfirmShipment] = useState(null);
   const [contestDelivery, setcontestDelivery] = useState([]);
   const [confirmDeliverylOldEvent, setconfirmDeliveryOldEvent] = useState([]);
+
   const [totalSupply, setTotalSupply] = useState(null);
   const [ownedIds, setOwnedIds] = useState([]);
   const [currentSells, setCurrentSells] = useState([]);
@@ -48,6 +49,7 @@ function ViewerComponent() {
   const [id8, setId8] = useState('');
   const [id9, setId9] = useState('');
   const [id10, setId10] = useState('');
+
 
 
 
@@ -161,6 +163,7 @@ function ViewerComponent() {
 
   };
 
+
   const handleGetTotalSupply = async () => {
     const info = await contract.methods
     .getTotalSupply()
@@ -215,8 +218,9 @@ function ViewerComponent() {
 
   useEffect(() => {
     const getPastCollateralEvents = async () => {
+      const deployTx = await web3.eth.getTransaction(txhash)
       const events = await contract.getPastEvents("CollateralAdded", {
-        fromBlock: 0,
+        fromBlock: deployTx.blockNumber,
         toBlock: "latest"
       });
       setBottleCollateralOldEvent(events);
@@ -240,8 +244,9 @@ function ViewerComponent() {
 
   useEffect(() => {
     const getPastConfirmEvents = async () => {
+      const deployTx = await web3.eth.getTransaction(txhash)
       const events = await contract.getPastEvents("ConfirmedDelivery", {
-        fromBlock: 0,
+        fromBlock: deployTx.blockNumber,
         toBlock: "latest"
       });
       setconfirmDeliveryOldEvent(events);
@@ -398,7 +403,7 @@ function ViewerComponent() {
               <ul >
                 {bottleCollateralOldEvent.map((event) => (
                   <li key={event.id} >
-                    The producer with the address {event.returnValues.from} has added a collateral of {web3.utils.fromWei(event.returnValues.value.toString(), "ether")} Ether for the the Bottle with the id {event.returnValues.id}.
+                    The producer with the address {event.returnValues.from} has added a collateral of {web3.utils.fromWei(event.returnValues.value.toString(), "ether")} Ether for the Bottle with the id {event.returnValues.id}.
                     <br />
                     The Bottle is now shipped ! 
                     <br />
@@ -459,6 +464,10 @@ function ViewerComponent() {
               </p>
           )}
         </Text>
+
+        
+
+        
 
       </Flex>
 

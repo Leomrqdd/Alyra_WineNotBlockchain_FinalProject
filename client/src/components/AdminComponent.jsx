@@ -20,7 +20,7 @@ import {
 
 function AdminComponent() {
 
-    const { state: { contract, accounts,web3 } } = useEth();
+    const { state: { contract, accounts, web3, txhash } } = useEth();
     const [producerAddress, setProducerAddress] = useState('');
     const [producerAddress2, deleteProducerAddress] = useState('');
     const [producerAddress3,checkProducerAddress]  = useState('')
@@ -169,9 +169,9 @@ function AdminComponent() {
 
       useEffect(() => {
         const getWhitelistedProducers = async () => {
+          const deployTx = await web3.eth.getTransaction(txhash)
           const oldEvents = await contract.getPastEvents('WhitelistedProducer', { 
-          
-            fromBlock: 0, toBlock: 'latest' 
+            fromBlock: deployTx.blockNumber, toBlock: 'latest' 
         });
           setWhitelistedProducers(oldEvents);
         };
@@ -197,8 +197,9 @@ function AdminComponent() {
 
       useEffect(() => {
         const getPastContestEvents = async () => {
+          const deployTx = await web3.eth.getTransaction(txhash)
           const events = await contract.getPastEvents("ContestedDelivery", {
-            fromBlock: 0,
+            fromBlock: deployTx.blockNumber,
             toBlock: "latest"
           });
           setContestedDeliveryOldEvent(events);
@@ -210,8 +211,9 @@ function AdminComponent() {
       
     useEffect(() => {
       const getPastConfirmEvents = async () => {
+        const deployTx = await web3.eth.getTransaction(txhash)
         const events = await contract.getPastEvents("ConfirmedDelivery", {
-          fromBlock: 0,
+          fromBlock: deployTx.blockNumber,
           toBlock: "latest"
         });
         setConfirmedDeliveryOldEvent(events);
@@ -448,7 +450,6 @@ function AdminComponent() {
                 {confirmedDeliveryOldEvent.map((event) => (
                   <li key={event.id}>
                     The delivery of the Bottle with the id {event.returnValues.id} was confirmed by the owner with the address {event.returnValues.from}.
-                    The issue is now solved ! 
                   </li>
                 ))}
               </ul>
