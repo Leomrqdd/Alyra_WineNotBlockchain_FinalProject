@@ -36,6 +36,14 @@ module.exports = {
         );
       },
       network_id: 5,
+      gas: 4000000
+    },
+
+    Mumbai: {
+      provider: function() {
+        return new HDWalletProvider(`${process.env.MNEMONIC}`, `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_ID}`)
+      },
+      network_id: 80001
     },
   },
 
@@ -48,13 +56,12 @@ module.exports = {
   compilers: {
     solc: {
       version: "0.8.18", // Fetch exact version from solc-bin (default: truffle's version)
-      // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
        settings: {          // See the solidity docs for advice about optimization and evmVersion
        optimizer: {
          enabled: true,
-         runs: 100
+         runs: 1500
          },
-      //  evmVersion: "byzantium"
+      evmVersion: "byzantium"
        }
     },
   },
