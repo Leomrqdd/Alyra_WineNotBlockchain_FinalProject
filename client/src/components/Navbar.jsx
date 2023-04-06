@@ -44,7 +44,7 @@ function Navbar(userType, userAddress) {
         </Text>
         <Spacer />
         <Box display="flex" alignItems="center" justifyContent="flex-start">
-          <img src="/logo2.png" alt="logo3" width="60px" />
+          <img src="/logo2.png" alt="logo2" width="60px" />
           <Text fontSize="2xl" fontWeight="bold" color="#211b59">WineNotBlockchain</Text>
         </Box>
         <Spacer />
