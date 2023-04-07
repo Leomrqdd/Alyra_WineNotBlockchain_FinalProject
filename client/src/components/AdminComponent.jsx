@@ -5,10 +5,8 @@ import {
     Box,
     Flex,
     FormControl,
-    FormLabel,
     Input,
     Button,
-    useToast,
     Text,
   } from '@chakra-ui/react';
 
@@ -27,7 +25,6 @@ function AdminComponent() {
     const [whitelistedProducers, setWhitelistedProducers] = useState([]);
     const [message, setMessage] = useState('');
     const [eventWhitelist,setEventWhitelist] = useState([])
-    const toast = useToast();
     const [totalSupply, getTotalSupply] = useState(null);
     const [bottleOwner, setBottleOwner] = useState(null);
     const [bottleInfo, setBottleInfo] = useState({});
@@ -38,27 +35,11 @@ function AdminComponent() {
     const [confirmedDeliveryOldEvent, setConfirmedDeliveryOldEvent] = useState([]);
 
 
-
-
-
-
-
-
-
     const [id, setId] = useState('');
     const [id2, setId2] = useState('');
     const [id3, setId3] = useState('');
     const [id4, setId4] = useState('');
     const [id5, setId5] = useState('');
-
-
-
-
-
-
-
-    
-
 
 
     const handleAddressChange = (e) => {
@@ -72,9 +53,7 @@ function AdminComponent() {
         await contract.methods.whitelistProducer(producerAddress).send({ from: accounts[0] });
 
       };
-
-
-      
+  
       const handleAddressChange2 = (e) => {
         deleteProducerAddress(e.target.value);
       };
@@ -85,7 +64,6 @@ function AdminComponent() {
         }
         await contract.methods.revokeProducer(producerAddress2).send({ from: accounts[0] });
       };
-
 
       const handleAddressChange3 = (e) => {
         checkProducerAddress(e.target.value);
@@ -105,7 +83,6 @@ function AdminComponent() {
         }
       };
 
-
       const handleGetTotalSupply = async () => {
         const info = await contract.methods
         .getTotalSupply()
@@ -120,10 +97,7 @@ function AdminComponent() {
         .call({ from: accounts[0] }); 
     
         setBottleOwner(info);
-    
-    
       };
-
 
       const handleGetBottleInfo = async () => {
         const info = await contract.methods
@@ -140,7 +114,6 @@ function AdminComponent() {
   
         setBottleInfoSale(info);
   
-  
       };
 
       const handleGetBottleSales = async () => {
@@ -148,11 +121,8 @@ function AdminComponent() {
         .getSalesHistory(id4)
         .call({ from: accounts[0] }); 
   
-        setBottleSales(info);
-  
-  
+        setBottleSales(info); 
       };
-
 
       const handleGetBottleStatus = async () => {
         const info = await contract.methods
@@ -160,10 +130,9 @@ function AdminComponent() {
         .call({ from: accounts[0] }); 
   
         setBottleStatus(info);
-  
-  
       };
       
+
 
 
 
@@ -304,120 +273,120 @@ function AdminComponent() {
               <InfoOutlineIcon w={20} h={20} color="gray.500" />
             </Box>
 
-         <Button mt="4" onClick={handleGetTotalSupply}>Get Total Supply</Button>
-         {totalSupply != undefined && (
+            <Button mt="4" onClick={handleGetTotalSupply}>Get Total Supply</Button>
+            {totalSupply != undefined && (
+                <div>
+                  <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}} > TotalSupply : {totalSupply}</p>
+                </div>
+              )}
+            <FormControl>
+              <Input
+              type="number"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              placeholder="Enter bottle ID"
+            />
+            </FormControl>
+            <Button mt="4" onClick={handleGetBottleOwner}>Get Bottle Owner</Button>
+            {bottleOwner != undefined && (
+              <div>
+                <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Bottle Owner : {bottleOwner}</p>
+              </div>
+            )}
+
+          <FormControl>
+              <Input
+              type="number"
+              value={id2}
+              onChange={(e) => setId2(e.target.value)}
+              placeholder="Enter bottle ID"
+            />
+          </FormControl>
+
+          <Button mt="4" onClick={handleGetBottleInfo}>Get Bottle Info</Button>
+          {bottleInfo.producer && (
             <div>
-              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}} > TotalSupply : {totalSupply}</p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+                Producer Address : {bottleInfo.producer}
+              </p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+                <span style={{display: "inline-block", marginRight: "10px"}}>
+                  Producer Name : {bottleInfo.producerName}
+                </span>
+                <span style={{display: "inline-block", marginRight: "10px"}}>
+                  Designation of Origin : {bottleInfo.designationOfOrigin}
+                </span>
+                <span style={{display: "inline-block", marginRight: "10px"}}>
+                  Vintage : {bottleInfo.vintage}
+                </span>
+                <span style={{display: "inline-block"}}>
+                  Serial Number : {bottleInfo.serialNumber}
+                </span>
+              </p>
             </div>
           )}
           <FormControl>
-            <Input
-            type="number"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-            placeholder="Enter bottle ID"
-          />
+              <Input
+              type="number"
+              value={id3}
+              onChange={(e) => setId3(e.target.value)}
+              placeholder="Enter bottle ID"
+            />
           </FormControl>
-          <Button mt="4" onClick={handleGetBottleOwner}>Get Bottle Owner</Button>
-          {bottleOwner != undefined && (
+
+          <Button mt="4" onClick={handleGetBottleInfoSale}>Get Bottle Info Sale</Button>
+          {bottleInfoSale.price && (
             <div>
-              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Bottle Owner : {bottleOwner}</p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+                <span style={{display: "inline-block", marginRight: "10px"}}>
+                  Bottle Sale : {(bottleInfoSale.onSale).toString()}
+                </span>
+                {bottleInfoSale.onSale == true && ( 
+                <span style={{display: "inline-block", marginRight: "10px"}}>
+                  Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether
+                </span>
+                )}
+              </p>
             </div>
           )}
 
-        <FormControl>
-            <Input
-            type="number"
-            value={id2}
-            onChange={(e) => setId2(e.target.value)}
-            placeholder="Enter bottle ID"
-          />
-        </FormControl>
+          <FormControl>
+              <Input
+              type="number"
+              value={id4}
+              onChange={(e) => setId4(e.target.value)}
+              placeholder="Enter bottle ID"
+            />
+          </FormControl>
 
-        <Button mt="4" onClick={handleGetBottleInfo}>Get Bottle Info</Button>
-        {bottleInfo.producer && (
+          <Button mt="4" onClick={handleGetBottleSales}>Get Bottle Sales History </Button>
+          {bottleSales.length > 0 && (
           <div>
-            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
-              Producer Address : {bottleInfo.producer}
-            </p>
-            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
-              <span style={{display: "inline-block", marginRight: "10px"}}>
-                Producer Name : {bottleInfo.producerName}
-              </span>
-              <span style={{display: "inline-block", marginRight: "10px"}}>
-                Designation of Origin : {bottleInfo.designationOfOrigin}
-              </span>
-              <span style={{display: "inline-block", marginRight: "10px"}}>
-                Vintage : {bottleInfo.vintage}
-              </span>
-              <span style={{display: "inline-block"}}>
-                Serial Number : {bottleInfo.serialNumber}
-              </span>
-            </p>
+            {bottleSales.map((Sale, index) => (
+              <div key={index}>
+                <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Seller: {Sale.seller}</p>
+                <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Buyer: {Sale.buyer}</p>
+                <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+                  <span style={{display: "inline-block", marginRight: "10px"}}>
+                    Price: {web3.utils.fromWei(Sale.price.toString(), 'ether')} Ether 
+                  </span>
+                  <span style={{display: "inline-block", marginRight: "10px"}}>
+                    Timestamp: {Sale.timestamp}
+                  </span>
+                </p>
+            </div>
+            ))}
           </div>
-        )}
-        <FormControl>
-            <Input
-            type="number"
-            value={id3}
-            onChange={(e) => setId3(e.target.value)}
-            placeholder="Enter bottle ID"
-          />
-        </FormControl>
+          )}
 
-        <Button mt="4" onClick={handleGetBottleInfoSale}>Get Bottle Info Sale</Button>
-        {bottleInfoSale.price && (
-          <div>
-            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
-              <span style={{display: "inline-block", marginRight: "10px"}}>
-                Bottle Sale : {(bottleInfoSale.onSale).toString()}
-              </span>
-              {bottleInfoSale.onSale == true && ( 
-              <span style={{display: "inline-block", marginRight: "10px"}}>
-                Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether
-              </span>
-              )}
-            </p>
-          </div>
-        )}
-
-        <FormControl>
-            <Input
-            type="number"
-            value={id4}
-            onChange={(e) => setId4(e.target.value)}
-            placeholder="Enter bottle ID"
-          />
-        </FormControl>
-
-        <Button mt="4" onClick={handleGetBottleSales}>Get Bottle Sales History </Button>
-        {bottleSales.length > 0 && (
-        <div>
-          {bottleSales.map((Sale, index) => (
-            <div key={index}>
-              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Seller: {Sale.seller}</p>
-              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Buyer: {Sale.buyer}</p>
-              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
-                <span style={{display: "inline-block", marginRight: "10px"}}>
-                  Price: {web3.utils.fromWei(Sale.price.toString(), 'ether')} Ether 
-                </span>
-                <span style={{display: "inline-block", marginRight: "10px"}}>
-                  Timestamp: {Sale.timestamp}
-                </span>
-              </p>
-           </div>
-          ))}
-        </div>
-        )}
-
-        <FormControl>
-            <Input
-            type="number"
-            value={id5}
-            onChange={(e) => setId5(e.target.value)}
-            placeholder="Enter bottle ID"
-          />
-        </FormControl>
+          <FormControl>
+              <Input
+              type="number"
+              value={id5}
+              onChange={(e) => setId5(e.target.value)}
+              placeholder="Enter bottle ID"
+            />
+          </FormControl>
 
           <Button mt="4" onClick={handleGetBottleStatus}>Get Bottle Status</Button>
           {bottleStatus != undefined && (
@@ -432,35 +401,35 @@ function AdminComponent() {
           </>
           )}
 
-        <Text style={{color: 'red', fontStyle: 'italic', fontSize: '16px'}}>
-          <div>
-              <ul>
-                {contestedDeliveryOldEvent.map((event) => (
-                  <li key={event.id}>
-                    The delivery of the Bottle with the id {event.returnValues.id} was contested by the owner with the address {event.returnValues.from}.
-                  </li>
-                ))}
-              </ul>
-            </div>     
-        </Text>
-
-        <Text style={{color: 'green', fontStyle: 'italic', fontSize: '16px'}}>
-          <div>
-              <ul>
-                {confirmedDeliveryOldEvent.map((event) => (
-                  <li key={event.id}>
-                    The delivery of the Bottle with the id {event.returnValues.id} was confirmed by the owner with the address {event.returnValues.from}.
-                  </li>
-                ))}
-              </ul>
-            </div>     
+          <Text style={{color: 'red', fontStyle: 'italic', fontSize: '16px'}}>
+            <div>
+                <ul>
+                  {contestedDeliveryOldEvent.map((event) => (
+                    <li key={event.id}>
+                      The delivery of the Bottle with the id {event.returnValues.id} was contested by the owner with the address {event.returnValues.from}.
+                    </li>
+                  ))}
+                </ul>
+              </div>     
           </Text>
+
+          <Text style={{color: 'green', fontStyle: 'italic', fontSize: '16px'}}>
+            <div>
+                <ul>
+                  {confirmedDeliveryOldEvent.map((event) => (
+                    <li key={event.id}>
+                      The delivery of the Bottle with the id {event.returnValues.id} was confirmed by the owner with the address {event.returnValues.from}.
+                    </li>
+                  ))}
+                </ul>
+              </div>     
+            </Text>
             
 
-          </Flex>
-
-
         </Flex>
+
+
+      </Flex>
         </>
       );
     }

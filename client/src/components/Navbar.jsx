@@ -8,8 +8,6 @@ function Navbar(userType, userAddress) {
     const [address, setAddress] = useState('');
 
 
-
-
   useEffect(() => {
     if (accounts) {
       setAddress(accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4));
