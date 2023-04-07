@@ -136,11 +136,6 @@ contract("WineNotBlockchain", accounts => {
             expect(Number(storedData.serialNumber)).to.equal(_serialNumber);
         });
 
-        it("Should create a Bottle with the correct URI ", async() => {
-            const storedData = await MyContractInstance.getBottleURI(1);
-            expect(storedData).to.equal(_tokenURI);
-        });
-
         it("The Bottle should be owned by the producer", async() => {
             const storedData = await MyContractInstance.getBottleOwner(1);
             expect(storedData).to.be.equal(_producer);
@@ -165,7 +160,7 @@ contract("WineNotBlockchain", accounts => {
 
         it("A BottleCreation Event should be emitted", async() => {
             const storedData = await MyContractInstance.mintWineBottle(_producerName,_designationOfOrigin,_vintage,2,_tokenURI, {from: _producer});
-            await expectEvent(storedData, 'BottleCreation',this._producer,2);
+            await expectEvent(storedData, 'BottleCreation',this._producer,2,this._tokenURI);
         });
         
 
@@ -314,7 +309,7 @@ contract("WineNotBlockchain", accounts => {
     });
 
 
-    describe("Testing the Colateral", () => {
+    describe("Testing the Collateral", () => {
         
         beforeEach(async function() {
             MyContractInstance = await WineNotBlockchain.new({from: _owner});
@@ -466,7 +461,7 @@ contract("WineNotBlockchain", accounts => {
         });
         
 
-        it("The producer can olny get his collateral once the issue is solved by WineNotBlockhain Team", async () => {
+        it("The producer can only get his collateral once the issue is solved by WineNotBlockhain Team", async () => {
             await MyContractInstance.contestShipment(1, {from: _buyer});
             //issue solved
             await MyContractInstance.confirmDelivery(1, {from: _buyer});

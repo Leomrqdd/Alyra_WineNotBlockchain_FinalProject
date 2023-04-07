@@ -13,7 +13,6 @@ function Home() {
 
     const { state: { contract, accounts, web3 } } = useEth();
     const [userType, setUserType] = useState("viewer");
-    const [input, setInput] = useState(0);
     const [metamask, setMetamask] = useState(false);
 
 
@@ -121,7 +120,7 @@ function Home() {
       )}
 
       <Box className="footer" h="30px" bg="gray.50" display="flex" justifyContent="center" alignItems="center">
-        <Text fontSize="12px" fontWeight="bold" color="#211b59">Copyright © 2023 WineNotBlockchain - Alyra - Promo SATOSHI - Léo & Loic & Bertrand & Pauline</Text>
+        <Text fontSize="12px" fontWeight="bold" color="#211b59">Copyright © 2023 WineNotBlockchain - Alyra - Promo SATOSHI - Léo, Pauline, Loic, Bertrand</Text>
       </Box>
 
     </>

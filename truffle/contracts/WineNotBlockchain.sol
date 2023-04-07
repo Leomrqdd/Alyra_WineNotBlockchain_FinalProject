@@ -257,6 +257,8 @@ contract WineNotBlockchain is ERC721, Ownable {
   function indicateShipmentToProducer(uint256 _id) external {
       require(ownerOf(_id) == msg.sender, "You are not the owner of this WineBottle");
       require(idToBottleStatus[_id] == bottleStatus.minted, "This bottle has already been asked for shipping or is in a different state");
+      require(idToSaleInfo[_id].onSale == false, "This bottle is for sale");
+
 
     
       idToBottleStatus[_id] = bottleStatus.askedForShipping;

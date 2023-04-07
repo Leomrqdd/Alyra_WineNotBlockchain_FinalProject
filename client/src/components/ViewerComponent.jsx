@@ -252,7 +252,7 @@ function ViewerComponent() {
       setconfirmDeliveryOldEvent(events);
     };
     getPastConfirmEvents();
-  }, [contract]);
+  },);
 
 
   

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormLabel, Input, Button,Flex,Text, Image, Grid, Box, Select} from "@chakra-ui/react";
+import { FormControl,Input, Button,Flex,Text, Image, Grid, Box, Select} from "@chakra-ui/react";
 import useEth from "../contexts/EthContext/useEth";
 import { useState, useEffect} from 'react';
 import { EditIcon } from '@chakra-ui/icons'
@@ -17,7 +17,6 @@ function ProducerComponent() {
     const [serialNumber, setSerialNumber] = useState("");
     const [tokenURI, setTokenURI] = useState("");
     const [selectedImage, setSelectedImage] = useState("No Image");
-
     const [mintEvent, setMintEvent] = useState([]);
     const [price, setPrice] = useState('');
     const [price2, setPrice2] = useState('');
@@ -32,13 +31,6 @@ function ProducerComponent() {
     const [contestedDeliveryOldEvent, setContestedDeliveryOldEvent] = useState([]);
     const [oldMintEvent, setOldMintEvent] = useState([]);
     const [hasProduction, setHasProduction] = useState(null);
-
-
-
-
-    const [sentBottles, setSentBottles] = useState([]);
-
-
 
 
     const [id, setId] = useState('');
@@ -90,7 +82,6 @@ function ProducerComponent() {
       console.log(result);
     };
 
-
     const handleCollateral = async () => {
       const weiValue = web3.utils.toWei(price2.toString(), "ether")
       const result = await contract.methods
@@ -99,8 +90,6 @@ function ProducerComponent() {
   
       console.log(result);
     };
-
-
 
     const handleGetBottleInfo = async () => {
       const info = await contract.methods
@@ -116,8 +105,6 @@ function ProducerComponent() {
       .call({ from: accounts[0] }); 
 
       setBottleInfoSale(info);
-
-
     };
 
     const handleGetBottleStatus = async () => {
@@ -126,19 +113,14 @@ function ProducerComponent() {
       .call({ from: accounts[0] }); 
 
       setBottleStatus(info);
-
-
     };
     
-
     const handleGetBottleSales = async () => {
       const info = await contract.methods
       .getSalesHistory(id5)
       .call({ from: accounts[0] }); 
 
       setBottleSales(info);
-
-
     };
 
     
@@ -156,7 +138,6 @@ function ProducerComponent() {
       printMintEvent();
     }, [accounts, contract]);
 
-      
     useEffect(() => {
     
       const printSaleEvent = async () => {
@@ -170,7 +151,6 @@ function ProducerComponent() {
       printSaleEvent();
     }, [accounts, contract]);
 
-
     useEffect(() => {
     
       const printCollateralEvent = async () => {
@@ -183,8 +163,6 @@ function ProducerComponent() {
       printCollateralEvent();
     }, [accounts, contract]);
 
-
-    
     useEffect(() => {
       const getPastShippingEvents = async () => {
         const deployTx = await web3.eth.getTransaction(txhash)
@@ -196,7 +174,6 @@ function ProducerComponent() {
       };
       getPastShippingEvents();
     }, [contract]);
-
 
     useEffect(() => {
       const getPastConfirmEvents = async () => {
@@ -210,7 +187,6 @@ function ProducerComponent() {
       getPastConfirmEvents();
     }, [contract]);
 
-
     useEffect(() => {
       const getPastContestEvents = async () => {
         const deployTx = await web3.eth.getTransaction(txhash)
@@ -222,7 +198,6 @@ function ProducerComponent() {
       };
       getPastContestEvents();
     }, [contract]);
-
 
     useEffect(() => {
       const getPastMintEvents = async () => {
@@ -236,22 +211,23 @@ function ProducerComponent() {
         setHasProduction(bool);
       };
       getPastMintEvents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [contract, accounts, hasProduction]);
+    },);
   
   
+
+
 
     return (
       <>
       <Flex w="100%" h="calc(100vh - 100px)" marginTop="100px" overflowY="auto">
-      <Flex
-          w="50%"
-          h="calc(100vh - 100px)"
-          bg="#f2f2f2"
-          direction="column"
-          align="center"
-          overflowY="auto"
-      >
+        <Flex
+            w="50%"
+            h="calc(100vh - 100px)"
+            bg="#f2f2f2"
+            direction="column"
+            align="center"
+            overflowY="auto"
+        >
           <Box mt="4" mb="4" display="flex" justifyContent="center" alignItems="flex-start" >
               <EditIcon w={20} h={20} color="gray.500" />
           </Box>
@@ -422,144 +398,144 @@ function ProducerComponent() {
         overflowY="auto"
         >
 
-        <Box mt="4" mb="2" display="flex" justifyContent="center">
-          <InfoOutlineIcon w={20} h={20} color="gray.500" />
-        </Box>
-        <FormControl>
-            <Input
-            type="number"
-            value={id3}
-            onChange={(e) => setId3(e.target.value)}
-            placeholder="Enter bottle ID"
-          />
-        </FormControl>
+          <Box mt="4" mb="2" display="flex" justifyContent="center">
+            <InfoOutlineIcon w={20} h={20} color="gray.500" />
+          </Box>
+          <FormControl>
+              <Input
+              type="number"
+              value={id3}
+              onChange={(e) => setId3(e.target.value)}
+              placeholder="Enter bottle ID"
+            />
+          </FormControl>
 
-        <Button mt="4" onClick={handleGetBottleInfo}>Get Bottle Info</Button>
-        {bottleInfo.producer && (
-          <Text>
-          <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
-            Producer Address : {bottleInfo.producer}
-          </p>
-          <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
-            <span style={{display: "inline-block", marginRight: "10px"}}>
-              Producer Name : {bottleInfo.producerName}
-            </span>
-            <span style={{display: "inline-block", marginRight: "10px"}}>
-              Designation of Origin : {bottleInfo.designationOfOrigin}
-            </span>
-            <span style={{display: "inline-block", marginRight: "10px"}}>
-              Vintage : {bottleInfo.vintage}
-            </span>
-            <span style={{display: "inline-block"}}>
-              Serial Number : {bottleInfo.serialNumber}
-            </span>
-          </p>
-        </Text>
-        )}
-
-
-        <FormControl>
-            <Input
-            type="number"
-            value={id4}
-            onChange={(e) => setId4(e.target.value)}
-            placeholder="Enter bottle ID"
-          />
-        </FormControl>
-
-        <Button mt="4" onClick={handleGetBottleInfoSale}>Get Bottle Info Sale</Button>
-        {bottleInfoSale.price && (
-          <Text>
-          <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
-            <span style={{display: "inline-block", marginRight: "10px"}}>
-              Bottle Sale : {(bottleInfoSale.onSale).toString()}
-            </span>
-            {bottleInfoSale.onSale == true && ( 
-            <span style={{display: "inline-block", marginRight: "10px"}}>
-              Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether
-            </span>
-            )}
-          </p>
-        </Text>
-        )}
-
-        <FormControl>
-            <Input
-            type="number"
-            value={id5}
-            onChange={(e) => setId5(e.target.value)}
-            placeholder="Enter bottle ID"
-          />
-        </FormControl>
-
-        <Button mt="4" onClick={handleGetBottleSales}>Get Bottle Sales History </Button>
-        {bottleSales.length > 0 && (
-        <Text>
-        {bottleSales.map((Sale, index) => (
-          <div key={index}>
-            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Seller: {Sale.seller}</p>
-            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Buyer: {Sale.buyer}</p>
+          <Button mt="4" onClick={handleGetBottleInfo}>Get Bottle Info</Button>
+          {bottleInfo.producer && (
+            <Text>
+            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+              Producer Address : {bottleInfo.producer}
+            </p>
             <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
               <span style={{display: "inline-block", marginRight: "10px"}}>
-                Price: {web3.utils.fromWei(Sale.price.toString(), 'ether')} Ether 
+                Producer Name : {bottleInfo.producerName}
               </span>
               <span style={{display: "inline-block", marginRight: "10px"}}>
-                Timestamp: {Sale.timestamp}
+                Designation of Origin : {bottleInfo.designationOfOrigin}
+              </span>
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Vintage : {bottleInfo.vintage}
+              </span>
+              <span style={{display: "inline-block"}}>
+                Serial Number : {bottleInfo.serialNumber}
               </span>
             </p>
-         </div>
-        ))}
-      </Text>
-        )}
-
-        <FormControl>
-            <Input
-            type="number"
-            value={id6}
-            onChange={(e) => setId6(e.target.value)}
-            placeholder="Enter bottle ID"
-          />
-        </FormControl>
-
-          <Button mt="4" onClick={handleGetBottleStatus}>Get Bottle Status</Button>
-          {bottleStatus != undefined && (
-          <>
-            {bottleStatus == 0 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Mint</p>}
-            {bottleStatus == 1 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Asked for Shipping</p>}
-            {bottleStatus == 2 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Shipped</p>}
-            {bottleStatus == 3 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Received</p>}
-            {bottleStatus == 4 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Contested</p>}
-            {bottleStatus == 5 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : lost</p>}
-            {bottleStatus > 5 &&  <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Unknown</p>}
-          </>
+          </Text>
           )}
 
-          <Box>
-            {hasProduction && <Text fontSize="2xl" fontWeight="bold" mb={4}>My Production</Text>}
-            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-              {oldMintEvent.map((event) => {
-                if (event.returnValues._owner == accounts[0]) {
-                  if (event.returnValues.URI == "https://gateway.pinata.cloud/ipfs/QmNUmQTgJ23n2jojDFx1jhWFtk6j93zHfUnTRYMG47ttki?filename=1.png") {
-                    return (
-                      <Box key={event.id}>
-                        <Image src="https://gateway.pinata.cloud/ipfs/QmNUmQTgJ23n2jojDFx1jhWFtk6j93zHfUnTRYMG47ttki?filename=1.png" alt="My Image" w="100%" h="auto" />
-                        <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="4">Bottle ID : {event.returnValues.id}</Text>
-                      </Box>
-                    );
-                  } else if (event.returnValues.URI == "https://gateway.pinata.cloud/ipfs/QmQba8Sye7UgY8V61kKoTqXzonKmVQxRzQo6PS2vNnm3Cc?filename=2.png") {
-                    return (
-                      <Box key={event.id}>
-                        <Image src="https://gateway.pinata.cloud/ipfs/QmQba8Sye7UgY8V61kKoTqXzonKmVQxRzQo6PS2vNnm3Cc?filename=2.png" alt="My Image" w="100%" h="auto" />
-                        <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="4"  >Bottle ID :  {event.returnValues.id}</Text>
-                      </Box>
-                    );
+
+          <FormControl>
+              <Input
+              type="number"
+              value={id4}
+              onChange={(e) => setId4(e.target.value)}
+              placeholder="Enter bottle ID"
+            />
+          </FormControl>
+
+          <Button mt="4" onClick={handleGetBottleInfoSale}>Get Bottle Info Sale</Button>
+          {bottleInfoSale.price && (
+            <Text>
+            <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Bottle Sale : {(bottleInfoSale.onSale).toString()}
+              </span>
+              {bottleInfoSale.onSale == true && ( 
+              <span style={{display: "inline-block", marginRight: "10px"}}>
+                Bottle Price : {web3.utils.fromWei(bottleInfoSale.price.toString(), 'ether')} Ether
+              </span>
+              )}
+            </p>
+          </Text>
+          )}
+
+          <FormControl>
+              <Input
+              type="number"
+              value={id5}
+              onChange={(e) => setId5(e.target.value)}
+              placeholder="Enter bottle ID"
+            />
+          </FormControl>
+
+          <Button mt="4" onClick={handleGetBottleSales}>Get Bottle Sales History </Button>
+          {bottleSales.length > 0 && (
+          <Text>
+          {bottleSales.map((Sale, index) => (
+            <div key={index}>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Seller: {Sale.seller}</p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}> Buyer: {Sale.buyer}</p>
+              <p style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>
+                <span style={{display: "inline-block", marginRight: "10px"}}>
+                  Price: {web3.utils.fromWei(Sale.price.toString(), 'ether')} Ether 
+                </span>
+                <span style={{display: "inline-block", marginRight: "10px"}}>
+                  Timestamp: {Sale.timestamp}
+                </span>
+              </p>
+          </div>
+          ))}
+        </Text>
+          )}
+
+          <FormControl>
+              <Input
+              type="number"
+              value={id6}
+              onChange={(e) => setId6(e.target.value)}
+              placeholder="Enter bottle ID"
+            />
+          </FormControl>
+
+            <Button mt="4" onClick={handleGetBottleStatus}>Get Bottle Status</Button>
+            {bottleStatus != undefined && (
+            <>
+              {bottleStatus == 0 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Mint</p>}
+              {bottleStatus == 1 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Asked for Shipping</p>}
+              {bottleStatus == 2 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Shipped</p>}
+              {bottleStatus == 3 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Received</p>}
+              {bottleStatus == 4 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Contested</p>}
+              {bottleStatus == 5 && <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : lost</p>}
+              {bottleStatus > 5 &&  <p  style={{fontSize: "14px", fontStyle: "italic", color: "#555"}}>Bottle Status : Unknown</p>}
+            </>
+            )}
+
+            <Box>
+              {hasProduction && <Text fontSize="2xl" fontWeight="bold" mb={4}>My Production</Text>}
+              <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                {oldMintEvent.map((event) => {
+                  if (event.returnValues._owner == accounts[0]) {
+                    if (event.returnValues.URI == "https://gateway.pinata.cloud/ipfs/QmNUmQTgJ23n2jojDFx1jhWFtk6j93zHfUnTRYMG47ttki?filename=1.png") {
+                      return (
+                        <Box key={event.id}>
+                          <Image src="https://gateway.pinata.cloud/ipfs/QmNUmQTgJ23n2jojDFx1jhWFtk6j93zHfUnTRYMG47ttki?filename=1.png" alt="My Image" w="100%" h="auto" />
+                          <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="4">Bottle ID : {event.returnValues.id}</Text>
+                        </Box>
+                      );
+                    } else if (event.returnValues.URI == "https://gateway.pinata.cloud/ipfs/QmQba8Sye7UgY8V61kKoTqXzonKmVQxRzQo6PS2vNnm3Cc?filename=2.png") {
+                      return (
+                        <Box key={event.id}>
+                          <Image src="https://gateway.pinata.cloud/ipfs/QmQba8Sye7UgY8V61kKoTqXzonKmVQxRzQo6PS2vNnm3Cc?filename=2.png" alt="My Image" w="100%" h="auto" />
+                          <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="4"  >Bottle ID :  {event.returnValues.id}</Text>
+                        </Box>
+                      );
+                    }
                   }
-                }
-                return null;
-              })}
-            </Grid>
-            {!hasProduction && <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="4" mt="8" >You need to mint a Bottle to see your production Here</Text>}
-          </Box>
+                  return null;
+                })}
+              </Grid>
+              {!hasProduction && <Text textAlign="center" style={{fontSize: "18px", fontStyle: "italic", color: "#555"}} mb="4" mt="8" >You need to mint a Bottle to see your production Here</Text>}
+            </Box>
 
           
         </Flex>
