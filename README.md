@@ -8,6 +8,8 @@ For this project, we have used the Truffle Box, React and Chakra-ui
 
 ## Links 
 
+Demo in Video : https://www.youtube.com/watch?v=9K60N4QECQQ
+
 
 ## Technical Architecture
 
