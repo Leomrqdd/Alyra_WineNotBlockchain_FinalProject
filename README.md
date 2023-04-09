@@ -10,6 +10,9 @@ For this project, we have used the Truffle Box, React and Chakra-ui
 
 Demo in Video : https://www.youtube.com/watch?v=9K60N4QECQQ
 
+DApp deployed on Vercel : https://alyra-wine-not-blockchain-pauline.vercel.app/
+
+
 
 ## Technical Architecture
 
